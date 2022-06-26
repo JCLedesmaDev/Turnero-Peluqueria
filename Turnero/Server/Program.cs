@@ -3,7 +3,6 @@ global using Turnero.Shared;
 global using Microsoft.EntityFrameworkCore;
 /* Juan: Usings globales para todo le proyecto Server */
 
-using Microsoft.AspNetCore.ResponseCompression;
 using Turnero.BaseDatos;
 using Microsoft.OpenApi.Models;
 

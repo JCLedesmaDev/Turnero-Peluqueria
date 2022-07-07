@@ -8,7 +8,11 @@ namespace Turnero.Shared
 {
     public class EntityBase
     {
+
+        public int IdAA { get; set; }
         public int Id { get; set; }
+
+        public string Name { get; set; }    
 
     }
 }

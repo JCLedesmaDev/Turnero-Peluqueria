@@ -1,0 +1,254 @@
+---- Agregar nuevo proyecto a la solucion: ----
+
+Para agregar un nuevo proyecto deeremos hacer los isguientes pasos:
+1) Click derecho a la Solucion > Agregar > Nuevo Proyecto
+2) Buscamos "Bibloteca de clases" (Proyecto para crear una bibloteca de clientes para .NET)
+3) Definimos el nombre del Proyecto. Por ejem.: Si la solucion se llama BlazorApp1, 
+   podriamos llamar el nuevo proyecto como "BlazorApp1.BD"
+
+
+
+---- Definir paquetes NuGet del proyecto BD. ----
+
+1) Click derecho en el proyecto > Administrar paquetes de NuGet
+En caso de que estemos agregando los paquetes al proyecto de la BD.
+Le tendremos que agregar: 
+  - Microsoft.EntityFrameworkCore.SqlServer
+  - Microsoft.EntityFrameworkCore.Tools
+
+
+
+
+---- Configurar el proyecto BD. ----
+
+PD: Complementar con proyecto Blazor hecho por mi.
+
+1) Borrar el archivo Class1.cs que trae por defecto
+2) Crear una carpeta llamada Data.
+3) Dentro de Data, crearemos una clase llamada BDContext en cual
+   heredara el DbContext del using Microsoft.EntityFrameworkCore;
+
+   Nota: El nombre de la Clase, no debe coincidir con el del namespace y 
+         debe ser el mismo que el nombre del archivo
+         Por ej.: Si nuestro archivo se llama "BDContext", nuestro namespace
+		 no puede terminar en .BDContext
+
+   Nota 2: Cambiar internal por public.
+
+4) Definimos las Tablas que tendra nuestra BD a partir de las Clases, 
+   utilizando por ejem.:
+     public DbSet<Medico> MedicosDB { get; set; }
+
+   Nota: Esta clase "Medico" representa nuestra tabla "MedicosDB".
+   Nota 2: Estas clases las podemos sacar de Shared si comlpemento con el otro proyecto.
+
+5) Generamos el constructor de nuestra BD, haciendole Ctrl + . al nombre de la Clase
+   y elegir la opcion que diga "Generar constructor con optios"
+
+
+
+---- Configurar la Conexion de la BD al Proyecto Server. ----
+
+PD: Complementar con el proyecto visto de Blazor.
+
+1) Agregarle el NuGet "Microsoft.EntityFrameworkCore.Tools" al proyecto
+   BlazorApp1.Server (Idem a unos pasos de arriba)
+
+
+2) Le deberemos agregar proyecto inicial (es decir, con el cual 
+   inicia el programa), el nuevo proyecto que creamos para que lo
+   incorpore.
+
+   PD: Para saber cual es el proyecto inicial, deberemos fijarnos
+       dentro de todos los proyectos que tiene la solucion, cual es 
+	   el que resalta con letras negras.
+
+   Para ello abriremos BLazorApp.Server > Dependencias > Proyectos
+   > "Agregar referencia del proyecto" y seleccionamos
+	"BlazorApp.BD" debido a que es un proyecto nuevo q simula nuestra
+	BD
+
+
+3) Este paso estara dividido en varias partes:
+
+PD: Complementar con el proyecto visto de Blazor.
+   
+     A) Ir a Program.css dentro de ".Server" para indicar que lea la conexion con la BD.
+		Para eso, escribiremos:
+		var conn = builder.Configuration.GetConnectionString("conn");
+
+		NOTA: "conn", sera la  conexion de nuestra BD. 
+		La variable "conn" viene de "appsettings.json" / "appsettings.Development.json"
+		Y dentro de ese archivo, deberemos pegar lo siguiente:
+		"ConnectionStrings": {
+			"conn": "Server=(localdb)\\MSSQLLocalDB;Database=pepe;Integrated Security=True"
+		 }, 
+
+		Nota - Datos a completar:
+		1) Server= 'La direccion de nuestra BD';
+		Para saber la direccion de nuestra BD en SQL Server, debemos ir a 
+		Ver > Explorador de objetos de SQL Server
+		2) Database= 'nombre de la Bd que vamos a usar'
+
+
+	 B) Le vamos a agregar a nuestra aplicacion un servicio, el cual sera el servicio 
+	    de conexion y administracion de nuestra BD y le pasamos como argumento, "opciones" 
+	    que esta relacionada a la conexion
+	    Escribiremos lo siguiente:
+		builder.Services.AddDbContext<BDContext>(
+			opciones => opciones.UseSqlServer(conn)
+		);
+	    Nota: BDContext, es el nombre de la clase de nuestro BD (Habra que importarlo)
+			 Idem con UseSqlServer
+
+
+
+---- Generar la Base de Datos. ----
+
+1) Compilar el proyecto (no ejecutarlo), solamente para verificar si tengo errores
+   Apretamos Ctrl + Shift + B : Nos compila el programa e indica errores
+
+2) Al no dar error, continuamos con:
+   Herramienta > Administrador paquetes NudGet > Consola del administrador de paquetes
+
+   En donde dice "Proyecto predeterminado: BlazorApp.Server", se lo deberemos 
+   cambiar por BlazorApp.BD
+
+   Dentro escribiremos los sig. comandos:
+   -> add-migration BaseInicial: Migra el codigo que hiciste en C# a codigo
+      EntityFramework.
+
+	  Nota: Este comando, nos generara una carpeta llamada "Migrations"
+	        en donde nos incluira los archivos que generamos al hacer el
+			add-migrations.
+			Cada archivo tendra un Id seguido de un _ + el nombre que
+			escribimos en el add-migrations
+
+   -> update-database: Convierte todo el codigo migrado a EntityFramework 
+      en Tablas.
+	  En caso de no tener ninguna tabla, las crea. Caso contrario, las actualiza.
+
+	   Nota: Para acceder a las tablas, deberemos apretar
+			 Ver > Explorador de objetos de SQL Server >
+			 SQL Server > (Nos aparecera el nombre de nuestra ConnectionStrings)
+			 > Base de Datos > (Aparecera el nombre q le definimos a la BD dentro de
+			   appSetting.development.json) > Tablas
+   
+	   Nota 2: Nos aparecera las tablas que definimos dentro de la clase BDContext/BaseDatos
+			   y los campos que tendra cada Tabla seran los mismos que sus respectivas clases
+			   definidas, debido a que esta dentro del DbSet<>
+
+	   Nota 3: En caso de que querramos cambiar esa clase, deberemos
+			   borrar la carpeta de Migracion y la Tabla Medicos
+			   para crear todo de 0.
+
+			    
+---- Restricciones en la BD. (DataAnnotations) ----
+
+
+Dentro de las clases, podemos ponerle etiquetas a los atributos de una clase,
+esto es con la finalidad de definir las restricciones que tendra nuestras tablas.
+Las etiquetas posibles son:
+- [Required] // Si le agregamos () podremos asignarle un mensaje.
+- [MaxLength('Nro long', ErrorMessage = "Mensaje en caso de incumplimiento")] //Solo para string
+- [MinLength('Nro long', ErrorMessage = "Mensaje en caso de incumplimiento")] //Solo para strings
+
+
+Nota: Estas etiquetas se colocan arriba del atributo en cuestion y se deberan importar
+      apretando Ctrl + . y eligiendo la 1ra opcion.
+
+	  Si puedo ejecutamos los comandos "add-migration ..." seguido del "update-database"
+	  veremos reflejado estas restricciones en las tablas BD
+
+Para definir la ""clave unica"" de una Tabla, deberemos escribir arriba de la clase, lo sig.:
+[Index(
+   nameof('nombre atributo/campo para hacerlo clave unica'), 
+   Name=" 'nombre de la clave unica.' ",
+   IsUnique = true
+)]
+
+Esto se lee como: Defino un Indice que de acuerdo al campo definido, voy a crear una 
+clave llamada "..." que sera unica.
+NOTA: Clave unica significa que ese valor nunca se va a poder repetir.
+
+Para definir una ""Clave Foranea"" deberemos hacer lo siguiente dentro de una clase:
+1- Definir un campo que tenga sea la union entre una Tabla y la otra.
+   Por ejem.: public int EspecialidadId { get; set; }
+2- Definir otro campo que sea del Tipo de la tabla a relacionar.
+   Por ejem.: public Especialidad Especialidad { get; set; }
+3- Arriba del 2do campo creado, le vamos a agregar una etiqueta llamada [FOreignKey],
+   la cual entablara la relacion entre el 1er campo creado y el 2do campo creado que
+   nos llevara a la otra tabla en cuestion
+
+Quedando por final, asi:
+  public int EspecialidadId { get; set; }
+        
+  [ForeignKey("EspecialidadId")]
+  public Especialidad Especialidad { get; set; }
+
+De esta manera, EspecialidadId sera nuestro campo que nos permitira relacionarnos
+con la Tabla Especialidad.
+
+Nota: Cuando generemos una busqeuda de datos y querramos traer los datos de la Especialidad
+de nuestra matricula, deberemos escribir algo como:
+_context.Matriculas.Include(Matricula => Matricula.Especialidad)
+(PD: ira el nombr del 2do campo creado.)
+
+
+
+
+---- Incorporar Swagger al Servidor ----
+
+Para ello, deberemos instalar primero un NuGet dentro de nuestor proyecto Server
+llamado: Swashbuckle.AspNetCore
+
+Una vez instalado el NuGet, nos dirigiremos al archivo Program.cs, para establecer
+la config del Swagger con el servidor, escribiendo el siguiente codigo:
+builder.Services.AddSwaggerGen(config =>
+{
+    config.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Matricula",
+        Version = "v1",
+    });
+});
+
+Por ultimo, le debemos indicar al proyecto, como va a trabajar con el Swagger,
+por lo que escribiremos el sig fragmento de codigo:
+app.UseSwagger();
+app.UseSwaggerUI(config =>
+{
+    config.SwaggerEndpoint(
+        "/swagger/v1/swagger.json",
+        "Locacion v1"
+    );
+});
+
+Para acceder al Swagger en la Web, deberemos iniciar el proyecto y a la URL 
+inicial que nos aparece como por ejem.: "https://localhost:7260",
+le deberemos agregar un "/swagger/index.html"
+
+Quedando al final de la siguiente forma:
+"https://localhost:7260/swagger/index.html" y automaticamente nos redireccionara
+a la pag. del swagger donde nos aparecera todos los metodos que contiene el proyecto.
+
+
+
+
+---------------------------------------------
+
+
+Nota personal:
+
+En proyecto de NEPS, tienen un proyecto llamado "entities_library" idem al Shared. 
+Cada carpeta es la entidad de algo en relacion pero tb tienen una carpeta llamada
+"Comun", la cual tiene clases pero con valores ya predefinido. 
+
+
+Por ejem.:
+public class CodigosArea {
+   public static long BitacoraEstudainte = 5
+}
+
+Para que cuando necesitan un estado en especifico, escriben:
+entity_library.Comun.CodigoArea.BitacoraEstudiante

@@ -1,10 +1,12 @@
-/* Juan: Usings globales para todo le proyecto Server */
-global using Turnero.Shared;
-global using Microsoft.EntityFrameworkCore;
-/* Juan: Usings globales para todo le proyecto Server */
 
-using Turnero.BaseDatos;
+#region Usings globales para todo le proyecto Server 
+
+global using Microsoft.EntityFrameworkCore;
+
+#endregion Usings globales para todo le proyecto Server */
+
 using Microsoft.OpenApi.Models;
+using Turnero.BaseDatos.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,11 +15,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 
-/* Juan: Conexion a Base Datos y Config de Swagger */
+#region Conexion a Base Datos y Config de Swagger
+
 builder.Services.AddDbContext<BDContext>(options =>
     options.UseSqlServer(builder.Configuration
      .GetConnectionString("DefaultConnection"))
 );
+
 
 builder.Services.AddSwaggerGen(config =>
 {
@@ -27,12 +31,14 @@ builder.Services.AddSwaggerGen(config =>
         Version = "v1",
     });
 });
-/* Juan: Conexion a Base Datos y Config de Swagger */
+
+#endregion Juan: Conexion a Base Datos y Config de Swagger
 
 
 var app = builder.Build();
 
-/* Juan: Inforcoparacion de Swagger al Server */
+#region Inforcoparacion de Swagger al Server 
+
 app.UseSwagger();
 app.UseSwaggerUI(config =>
 {
@@ -41,7 +47,8 @@ app.UseSwaggerUI(config =>
         "Locacion v1"
     );
 });
-/* Juan: Inforcoparacion de Swagger al Server */
+
+#endregion Juan: Inforcoparacion de Swagger al Server 
 
 
 // Configure the HTTP request pipeline.

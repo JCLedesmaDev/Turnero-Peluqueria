@@ -1,4 +1,87 @@
-﻿namespace BlazorFullStack.Server.Controllers
+﻿
+
+
+**** Lectura de un Controller: 
+     Dentro de un posible Controller, podemos tener lo siguiente:
+     Nota: Codigo ejemplo sacado de otro proyecto.
+
+     [Route("api/[controller]")]
+     [ApiController]
+
+     /// Nota: Nombre de nuestro controller.
+     public class SuperHeroController : ControllerBase
+     {
+     }
+
+    Esto significa que cuando tengamos que ejecutar un end-point 
+    de este controller, debemos tener en cuenta lo siguiente:
+    - El nombre del Controller = SuperHero;
+    - El prefijo de la url = api/
+
+    Por lo que al querer pegarle a este controller, desde el front
+    deberemos utilizar algun metodo HTTP dirigido hacia "api/SuperHero",
+    como por ejemplo:
+    
+    await Http.GetFromJsonAsync<SuperHero[]>("api/SuperHero");
+
+    NOTA: Leer "Notas youtube Client" para conocer sobre HTTP.
+
+
+
+*** Utilizar clases de Shared:
+
+    Para poder importar una class desde Shared, nos debemos dirigir 
+    al Program.cs de nuestro proyecto Server (o cliente dependiendo del caso) y 
+    escribir lo siguiente:
+    " global using ...direccion de carpeta shared...;"
+
+    Como por ejemplo: global using BlazorProyecto.Shared.BACK_DTO;
+
+
+
+
+*** Task<IActionResult> y Task<ActionResult<T>>
+
+    Ejemplo: public async Task<IActionResult> GetSuperHeroes()
+
+    Task<IActionResult>, nos indica que esta nos retornara una accion 
+    asincrona con un Status de Codigo 200 - 400 - etc).
+
+    Mientras que Task<ActionResult<T>>, Le especificamos que nos retornara
+    datos en especifico
+    Por ejem.: Task<ActionResult<List<SuperHero>>>.
+
+    NOTA: Task reprenseta una operacion asincrona que puede retornar un valor.
+
+
+
+*** Retornar diferentes Status ***
+
+    Para devolver diferentes Status a nuestro Front, tenemos los sig. metodos:
+    - return Ok(); // return status 200
+    - BadRequest() // Return status 400  
+    - NotFound() // Return status 404  
+
+*** Utilizar BD dentro de un Controller:
+    
+    (NOTA: Una vez que hayamos hecho todo lo relacionado a la creacion de 
+    entidades y de tablas del DbContext)
+
+    Para poder utilizar nuestra Base de Datos dentro de un controller, 
+    debemos inicializar dentro del constructor de nuestro controller 
+    la clase del DbContext escribiendo el siguiente codigo:
+
+    private readonly BaseDatosContext _context;
+    public SuperHeroController(BaseDatosContext BaseDatosContext)
+    {
+        this._context = BaseDatosContext;
+    }
+
+
+*** Ejemplo de un Controller CRUD:
+
+
+namespace BlazorFullStack.Server.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -16,22 +99,17 @@
         public async Task<ActionResult<List<SuperHero>>> GetSuperHeroes()
         {
 
-
             List<SuperHero> heroes = await _context.SuperHeroesEntity
                 .Include(sh => sh.Comic)
                 .ToListAsync();
 
             // Retorna un status 200 con Herores
             return Ok(heroes);
-
-            // Mientras que apra devovler un status 400, seria BadRequest()
-            // Mientras que apra devovler un status 404, seria NotFound()
         }
 
         [HttpGet("comics")]
         public async Task<ActionResult<List<Comic>>> GetComics()
         {
-
 
             List<Comic> comics = await _context.ComicsEntity.ToListAsync();
 
@@ -46,7 +124,7 @@
 
             // Nota no entiendo los metodos q brinda Entity.
             SuperHero? Heroe = await _context.SuperHeroesEntity
-                .Include(heroe => heroe.Comic) // Incluye el comic al que pertenece pero no comprendo la relacion.
+                .Include(heroe => heroe.Comic)
                 .FirstOrDefaultAsync(heroe => heroe.Id == Id);
 
 
@@ -58,9 +136,6 @@
             // Retorna un status 200 con Herores
             return Ok(Heroe);
 
-            // Retorna un status 200 con Herores
-            // Mientras que apra devovler un status 400, seria BadRequest()
-            // Mientras que apra devovler un status 404, seria NotFound()
         }
 
 
@@ -76,6 +151,7 @@
             /// Verificamos que se haya agregado el heroe en la BD
             return Ok(await GetDbHeores());
         }
+
         private async Task<ActionResult<List<SuperHero>>> GetDbHeores() {
 
 
@@ -86,10 +162,12 @@
         }
 
 
-            /// Nota: El 1er parametro es el que pasamos comun
-            /// Mientras que el 2do parametros es el que le pasamos por la URL
-            /// el nombre del parametro debe coincidir con lo Definido en la linea 93
-        [HttpPut("{IdParam}")]
+        /*
+           Nota: El 1er parametro es el que pasamos comun
+           Mientras que el 2do parametros es el que le pasamos por la URL
+           el nombre del parametro debe coincidir con lo Definido en la linea 93
+        */ 
+        [HttpPut("{IdParam}")] // Linea 93
         public async Task<ActionResult<List<SuperHero>>> UpdateSuperHero(SuperHero hero, int IdParam)
         {
            
@@ -116,8 +194,6 @@
         }
 
 
-
-
         [HttpDelete("{IdParam}")]
         public async Task<ActionResult<List<SuperHero>>> DeleteSuperHero( int IdParam)
         {
@@ -140,6 +216,4 @@
             return Ok(await GetDbHeores());
         }
     }
-
-
 }

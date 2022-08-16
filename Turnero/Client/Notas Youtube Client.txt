@@ -63,3 +63,48 @@ Y para ejecutar la navegacion, deberemos ejecutar dentro de una funcion lo sigui
 NavigationManager.NavigateTo($"hero/{Id}");  
 --> En este caso, nos re dirige hacia la pagina "/hero/{Id: int}"
 
+-------> Peticiones HTTP <-------
+
+
+*** GET: 
+Caso 1: En caso de que nos interese tener en cuenta el status de la peticion entre otras cosas, 
+        podemos hacer:
+
+        // Realizamos la peticion y obtenemos los status, headers, etc de la respuesta de la peticion.
+        var result = await this.http.GetAsync("api/User");
+
+        // Convertimos los datos del headers q recibimos en json para leerlos
+        var data = await result.Content.ReadFromJsonAsync<UserDTO>();
+        
+Caso 2: En caso de que solo nos interese los datos que nos devuelve el end-point, podemos hacer:
+
+        var result = await this.http.GetFromJsonAsync<UserDTO>("api/User");
+
+*** POST:
+        
+        /// Idem al "this.http.GetAsync" pero en enviando POST con los datos en formato JSON .
+        var result = await this.http.PostAsJsonAsync("api/User", ""); 
+        
+        // Convertimos los datos del headers q recibimos en json para leerlos
+        var data = await asd.Content.ReadFromJsonAsync(); 
+
+*** PUT:
+    
+        /// Idem al "this.http.GetAsync" pero en enviando PUT con los datos en formato JSON .
+        var result = await this.http.PutAsJsonAsync("api/User", ""); 
+        
+        // Convertimos los datos del headers q recibimos en json para leerlos
+        var data = await asd.Content.ReadFromJsonAsync(); 
+
+*** DELETE:
+
+        /// Idem al "this.http.GetAsync" pero en enviando DELETE con los datos en formato JSON .
+        var result = await this.http.DeleteAsync("api/User", ""); 
+        
+        // Convertimos los datos del headers q recibimos en json para leerlos
+        var data = await asd.Content.ReadFromJsonAsync(); 
+
+
+
+
+

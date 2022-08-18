@@ -1,6 +1,6 @@
 ---- Agregar nuevo proyecto a la solucion: ----
 
-Para agregar un nuevo proyecto deeremos hacer los isguientes pasos:
+Para agregar un nuevo proyecto deeremos hacer los sig pasos:
 1) Click derecho a la Solucion > Agregar > Nuevo Proyecto
 2) Buscamos "Bibloteca de clases" (Proyecto para crear una bibloteca de clientes para .NET)
 3) Definimos el nombre del Proyecto. Por ejem.: Si la solucion se llama BlazorApp1, 
@@ -10,23 +10,32 @@ Para agregar un nuevo proyecto deeremos hacer los isguientes pasos:
 
 ---- Definir paquetes NuGet del proyecto BD. ----
 
-1) Click derecho en el proyecto > Administrar paquetes de NuGet
-En caso de que estemos agregando los paquetes al proyecto de la BD.
+1) Click derecho en el proyecto ".BD" > Administrar paquetes de NuGet
 Le tendremos que agregar: 
-  - Microsoft.EntityFrameworkCore.SqlServer
-  - Microsoft.EntityFrameworkCore.Tools
+  -> Microsoft.EntityFrameworkCore.SqlServer
+  -> Microsoft.EntityFrameworkCore.Tools
+
+  Instalar SQL Server Express desde:
+	https://www.microsoft.com/es-es/sql-server/sql-server-downloads
 
 
 
 
 ---- Configurar el proyecto BD. ----
 
-PD: Complementar con proyecto Blazor hecho por mi.
+Cuando creamos el proyecto de Base de Datos, debemos crear una clase 
+que sea el Contexto de nuestra BD.
 
-1) Borrar el archivo Class1.cs que trae por defecto
-2) Crear una carpeta llamada Data.
-3) Dentro de Data, crearemos una clase llamada BDContext en cual
-   heredara el DbContext del using Microsoft.EntityFrameworkCore;
+Nota: Aqui se conectaran todas las clases/tablas que utilizaremos
+en el proyecto.
+
+A continuacion, deberemos hacer los siguientes pasos.
+
+1) Borrar el archivo Class1.cs que trae por defecto y crear una carpeta llamada Data.
+2) Dentro de Data, crearemos una clase llamada BDContext el cual
+   debemos indicar que heredara el DbContext proveniente del using Microsoft.EntityFrameworkCore;
+	Por ejem.: 
+	public class BDContext: DbContext {}
 
    Nota: El nombre de la Clase, no debe coincidir con el del namespace y 
          debe ser el mismo que el nombre del archivo
@@ -35,71 +44,112 @@ PD: Complementar con proyecto Blazor hecho por mi.
 
    Nota 2: Cambiar internal por public.
 
-4) Definimos las Tablas que tendra nuestra BD a partir de las Clases, 
-   utilizando por ejem.:
-     public DbSet<Medico> MedicosDB { get; set; }
+   Nota 3: Debemos agregar el @using del Microsoft.EntityFrameworkCore dentro
+	de nuestro Service > Program.cs.
+	Escribiendo: global using Microsoft.EntityFrameworkCore;
+	De esta manera, ya no nos aparecera en rojo el "DbContext"
+	y podremos utilizar el mismo using de manera global en todo el
+	proyecto en cuestion. 
 
-   Nota: Esta clase "Medico" representa nuestra tabla "MedicosDB".
-   Nota 2: Estas clases las podemos sacar de Shared si comlpemento con el otro proyecto.
+3) Inicializamos el constructor de nuestra clase para configurar nuestro
+	DbContext y que podamos utilizar todas las funcionalidades que nos brinda
+	dentro de nuestro proyecto.
+	Por ejemplo.:
+	  public BDContext(
+		  DbContextOptions<BDContext> options
+	  ) : base(options)
+	  {
 
-5) Generamos el constructor de nuestra BD, haciendole Ctrl + . al nombre de la Clase
-   y elegir la opcion que diga "Generar constructor con optios"
+	  }
+	PD: Generamos el constructor de nuestra BD, haciendole Ctrl + . al nombre de la Clase
+		y elegir la opcion que diga "Generar constructor con optios"
+
+4) Para conectar todas las clases a nuestro DbContext y que de esta 
+	manera, podamos definir las Entidades/Tablas que tendra nuestro proyecto,
+	deberemos utilizar una propiedad del DbContext y escribir lo siguiente
+	public DbSet<NombreClase> NombreEntidad/Tabla {get; set;};
+	Por ejem.:
+	public DbSet<Medico> MedicosDB { get; set; }
+
+	Nota: Esta clase "Medico" representa nuestra tabla "MedicosDB".
+	Nota 2: Estas clases las podemos sacar de Shared si comlpemento con el otro proyecto.
 
 
+5) ESPECIAL: Para poder asignarle datos por defecto a nuestra Base de Datos 
+	(es decir, cuando apenas arranque, tenga datos ya cargados), deberemos hacer
+	lo siguiente:
+
+	protected override void OnModelCreating(ModelBuilder modelBuilder){
+
+		// Definimos a la Entidad que le vamos a cargar datos mockeados.
+		modelBuilder.Entity<Comic>().HasData(    
+		   new Comic { Id = 1, Name = "Marvel"},
+		   new Comic { Id = 2, Name ="DC"}
+		);
+
+		modelBuilder.Entity<SuperHero>().HasData(
+			new SuperHero { 
+				Id = 1, 
+				FirstName="Peter", 
+				LastName="Parker",
+				HeroName="Spider-Man",
+				ComicId=1
+			},
+			new SuperHero {
+				Id = 2,
+				FirstName="Bruce",
+				LastName="Wayne",
+				HeroName="Batman",
+				ComicId=2
+			},
+		);
+	}
+
+	NOTA: Adaptar ejemplo a partir de lo que se necesite.
 
 ---- Configurar la Conexion de la BD al Proyecto Server. ----
 
-PD: Complementar con el proyecto visto de Blazor.
+Dentro de nuestro proyecto ".Server", debemos hacer los siguientes pasos:
 
 1) Agregarle el NuGet "Microsoft.EntityFrameworkCore.Tools" al proyecto
-   BlazorApp1.Server (Idem a unos pasos de arriba)
+   ".Server" (Idem a unos pasos de arriba)
 
-
-2) Le deberemos agregar proyecto inicial (es decir, con el cual 
+2) Debemos agregarle al proyecto inicial (es decir, con el cual 
    inicia el programa), el nuevo proyecto que creamos para que lo
-   incorpore.
+   incorpore (es decir, el ".BD").
 
    PD: Para saber cual es el proyecto inicial, deberemos fijarnos
        dentro de todos los proyectos que tiene la solucion, cual es 
 	   el que resalta con letras negras.
 
-   Para ello abriremos BLazorApp.Server > Dependencias > Proyectos
-   > "Agregar referencia del proyecto" y seleccionamos
-	"BlazorApp.BD" debido a que es un proyecto nuevo q simula nuestra
-	BD
+   Para ello abriremos ".Server" > Dependencias > Proyectos > 
+   "Agregar referencia del proyecto" y seleccionamos
+   "BlazorApp.BD" debido a que es un proyecto nuevo q simula nuestra BD
 
 
-3) Este paso estara dividido en varias partes:
-
-PD: Complementar con el proyecto visto de Blazor.
+3) Este paso estara dividido en 2 partes:
    
-     A) Ir a Program.css dentro de ".Server" para indicar que lea la conexion con la BD.
-		Para eso, escribiremos:
-		var conn = builder.Configuration.GetConnectionString("conn");
+	A) Configurar la cadena de conexion de la BD dentro del Server > appsetting.json / "appsettings.Development.json"
+		para ello pegaremos el siguiente codigo dentro del archivo:
+		  "ConnectionStrings": {
+			"DefaultConnection": "Server=localhost\\SqlExpress; Database='nombreBDCambiar'; Trusted_Connection=true;"
+		  },
 
-		NOTA: "conn", sera la  conexion de nuestra BD. 
-		La variable "conn" viene de "appsettings.json" / "appsettings.Development.json"
-		Y dentro de ese archivo, deberemos pegar lo siguiente:
-		"ConnectionStrings": {
-			"conn": "Server=(localdb)\\MSSQLLocalDB;Database=pepe;Integrated Security=True"
-		 }, 
-
-		Nota - Datos a completar:
+  		Nota - Datos a completar:
 		1) Server= 'La direccion de nuestra BD';
 		Para saber la direccion de nuestra BD en SQL Server, debemos ir a 
 		Ver > Explorador de objetos de SQL Server
 		2) Database= 'nombre de la Bd que vamos a usar'
 
+	B) Reegistramos la conexion de nuestra BD dentro del Service > Program.cs, escribiendo
+		lo siguiente:
+		builder.Services.AddDbContext<'NombreDbContext'>(options =>
+			options.UseSqlServer(builder.Configuration
+			 .GetConnectionString("DefaultConnection"))
+		)
 
-	 B) Le vamos a agregar a nuestra aplicacion un servicio, el cual sera el servicio 
-	    de conexion y administracion de nuestra BD y le pasamos como argumento, "opciones" 
-	    que esta relacionada a la conexion
-	    Escribiremos lo siguiente:
-		builder.Services.AddDbContext<BDContext>(
-			opciones => opciones.UseSqlServer(conn)
-		);
-	    Nota: BDContext, es el nombre de la clase de nuestro BD (Habra que importarlo)
-			 Idem con UseSqlServer
+	    Nota: NombreDbContext, es el nombre de la clase de nuestro BD como por ejemplo: BDContext 
+		(Habra que importarlo) Idem con UseSqlServer
 
 
 

@@ -1,0 +1,51 @@
+﻿1) Dentro de SuperHeroController tenemos lo siguiente:
+ [Route("api/[controller]")]
+    [ApiController]
+ public class SuperHeroController : ControllerBase
+    {
+    }
+
+    Esto significa que cuando tengamos que ejecutar un end-point 
+    de este controller, debemos tener en cuenta lo siguiente:
+    - El nombre del Controller = SuperHero;
+    - El prefijo de la url = api/
+
+    Por lo que al querer pegarle a este controller, desde el front
+    deberemos escribir lo siguiente:
+    await Http.GetFromJsonAsync<SuperHero[]>("api/SuperHero");
+
+
+2) Para poder importar una class desde Shared, nos debemos dirigir 
+dentro de "BlazorFullStack.Server > Program.cs" y pegar lo siguiente:
+" global using BlazorFullStack.Shared;"
+
+3) 41) public async Task<IActionResult> GetSuperHeroes()
+
+Task<IActionResult>, nos indica que esta nos retornara una accion 
+asincrona (Codigo 200 - 400 - etc).
+Mientras que Task<ActionResult<T>>, Le especificamos que nos retornara
+datos en especifico
+Por ejem.: Task<ActionResult<List<SuperHero>>>.
+
+   Task<ActionResult<>>: Se utiliza para las acciones asincronas ya que
+    permite especificar que tipo de dato nos devolvera como respuesta. 
+
+    Task<IActionResult>: Devuelve los estados de respuesta de las peticiones HTTP.
+    Es decor: Status 200, 400, etc...
+
+
+https://www.youtube.com/watch?v=K_P-qJj_8Bg&t=3003s
+
+(NOTA: Una vez que hayamos hecho todo lo relacionado a la creacion de 
+entidades y de tablas del DbContext)
+
+4) Para poder utilizar nuestra Base de Datos dentro de un controller, 
+debemos inicializar dentro del constructor de nuestro controller, 
+la clase del DbContext escribiendo el siguiente codigo:
+    private readonly BaseDatosContext _context;
+    public SuperHeroController(BaseDatosContext BaseDatosContext)
+    {
+        this._context = BaseDatosContext;
+    }
+
+

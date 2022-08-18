@@ -36,6 +36,9 @@ namespace Turnero.BaseDatos.Data.Entidades
         
         [Required(ErrorMessage = "Campo requerido")]
         public int ClienteId { get; set; }
+     
+        [Required(ErrorMessage = "Campo requerido")]
+        public DateTime FechaCreacion { get; set; }
 
         
         [ForeignKey("PeluqueroId")]
@@ -44,7 +47,6 @@ namespace Turnero.BaseDatos.Data.Entidades
         [ForeignKey("ClienteId")]
         public Cliente Cliente { get; set; }
 
-        public DateTime FechaCreacion { get; set; }
     }
 }
 

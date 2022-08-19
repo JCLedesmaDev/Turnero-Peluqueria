@@ -7,15 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="DTO Back\**" />
+    <Compile Remove="DTO Front\**" />
+    <EmbeddedResource Remove="DTO Back\**" />
+    <EmbeddedResource Remove="DTO Front\**" />
+    <None Remove="DTO Back\**" />
+    <None Remove="DTO Front\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.8" />
   </ItemGroup>
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DTO Back\" />
-    <Folder Include="DTO Front\" />
   </ItemGroup>
 </Project>

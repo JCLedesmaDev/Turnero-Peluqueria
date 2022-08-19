@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using Turnero.BaseDatos.Data.Comun;
 
 namespace Turnero.BaseDatos.Data.Entidades
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Turnero.BaseDatos.Data
+namespace Turnero.BaseDatos.Data.Comun
 {
     public class EntityBase
     {

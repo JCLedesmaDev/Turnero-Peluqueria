@@ -31,6 +31,5 @@ namespace Turnero.Server.Controllers
             .ToArray();
         }
 
-        public void asd() { }
     }
 }

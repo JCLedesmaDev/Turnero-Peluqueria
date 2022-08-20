@@ -34,7 +34,7 @@ namespace Turnero.BaseDatos.Data.Entidades
         public string DNI { get; set; }
 
         /// DUDAS CON LA RELACION
-        public List<Turno> ListaTurnos { get; set; }            
-        
+        public List<Turno> ListaTurnos { get; set; }
+
     }
 }

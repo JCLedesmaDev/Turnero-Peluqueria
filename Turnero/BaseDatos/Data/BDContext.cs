@@ -11,6 +11,76 @@ namespace Turnero.BaseDatos.Data
         {
         }
 
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+
+            modelBuilder.Entity<Turno>().HasData(
+                new Turno
+                {
+                    Id=1, ClienteId=1234,
+                    FechaCreacion= new DateTime(), 
+                    FechaTurno=new DateTime(2022, 8, 22, 17, 30, 00),
+                    PeluqueroId=1
+                },
+                new Turno
+                {
+                    Id = 2,
+                    ClienteId = 3456,
+                    FechaCreacion = new DateTime(),
+                    FechaTurno = new DateTime(2022, 9, 22, 17, 30, 00),
+                    PeluqueroId = 1
+                },
+                new Turno
+                {
+                    Id = 3,
+                    ClienteId = 2345,
+                    FechaCreacion = new DateTime(),
+                    FechaTurno = new DateTime(2022, 9, 22, 17, 30, 00),
+                    PeluqueroId = 2
+                }
+            );
+
+
+            modelBuilder.Entity<Cliente>().HasData(
+                new Cliente
+                {
+                    Id=1234, Nombre = "Mariano",
+                    Apellido="Cejas", NumeroTelefono="35124789",
+                    TurnoId=1,
+                },
+                new Cliente
+                {
+                    Id = 3456, Nombre = "Nacho",
+                    Apellido = "Aguada", NumeroTelefono = "35124789",
+                    TurnoId = 2,
+                },
+                new Cliente
+                {
+                    Id = 2345, Nombre = "Tincho",
+                    Apellido = "Marin", NumeroTelefono = "35124789",
+                    TurnoId = 3,
+                } 
+            );
+
+
+            modelBuilder.Entity<Peluquero>().HasData(
+               new Peluquero { 
+                   Id = 1, Nombre = "David", 
+                   Apellido="Gonzales", DNI="35.214.872", 
+                   ImagenPerfil="", Password="ASD", 
+                   //ListaTurnos = new List<Turno>()
+               },
+               new Peluquero
+               {
+                   Id = 2, Nombre = "Eduardo",
+                   Apellido = "Del Valle",DNI = "25.214.872",
+                   ImagenPerfil = "", Password = "ASD",
+                   //ListaTurnos = new List<Turno>()
+               }
+            );
+
+        }
+
 
         public DbSet<Turno> TablaTurnos { get; set; }
         public DbSet<Cliente> TablaClientes { get; set; }

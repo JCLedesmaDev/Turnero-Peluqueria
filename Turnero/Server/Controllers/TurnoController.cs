@@ -1,83 +1,35 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Turnero.BaseDatos.Data;
+using Turnero.BaseDatos.Data.Entidades;
+
 
 namespace Turnero.Server.Controllers
 {
-    public class TurnoController : Controller
+    [ApiController]
+    [Route("api/[controller]")]
+    public class TurnoController : ControllerBase
     {
-        // GET: TurnoController
-        public ActionResult Index()
+
+        private readonly BDContext _context;
+
+        public TurnoController(BDContext BDContext)
         {
-            return View();
+            this._context = BDContext;
         }
 
-        // GET: TurnoController/Details/5
-        public ActionResult Details(int id)
+        [HttpPost("consult")]
+        public async Task<IActionResult> consultarTurno(DateTime FechaHora, Peluquero peluquero)
         {
-            return View();
-        }
 
-        // GET: TurnoController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: TurnoController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
+            if (!ModelState.IsValid)
+            { 
+               ModelState.Values
+               .SelectMany(v => v.Errors)
+               .Select(e => e.ErrorMessage);                
             }
-            catch
-            {
-                return View();
-            }
-        }
 
-        // GET: TurnoController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
-
-        // POST: TurnoController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: TurnoController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: TurnoController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
+            return Ok("PUTO");
         }
     }
 }

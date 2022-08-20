@@ -217,3 +217,25 @@ namespace BlazorFullStack.Server.Controllers
         }
     }
 }
+
+
+
+**** Validar los DTOs provenientes del Front ****
+
+ModelState
+https://www.youtube.com/watch?v=-VtyFd3JZXQ
+            https://www-syncfusion-com.translate.goog/forums/126172/does-modelstate-isvalid-works-as-it-should?_x_tr_sl=en&_x_tr_tl=es&_x_tr_hl=es&_x_tr_pto=sc
+
+if (!ModelState.IsValid)
+{ 
+   ModelState.Values
+   .SelectMany(v => v.Errors)
+   .Select(e => e.ErrorMessage);                
+}
+
+El ModelState, toma en cuenta a los modelos que recibe como 
+parametro el controller.
+
+
+
+

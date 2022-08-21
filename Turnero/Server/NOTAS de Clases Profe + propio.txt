@@ -7,7 +7,6 @@ Para agregar un nuevo proyecto deeremos hacer los sig pasos:
    podriamos llamar el nuevo proyecto como "BlazorApp1.BD"
 
 
-
 ---- Definir paquetes NuGet del proyecto BD. ----
 
 1) Click derecho en el proyecto ".BD" > Administrar paquetes de NuGet
@@ -17,8 +16,6 @@ Le tendremos que agregar:
 
   Instalar SQL Server Express desde:
 	https://www.microsoft.com/es-es/sql-server/sql-server-downloads
-
-
 
 
 ---- Configurar el proyecto BD. ----
@@ -195,7 +192,6 @@ Dentro de nuestro proyecto ".Server", debemos hacer los siguientes pasos:
 			    
 ---- Restricciones en la BD. (DataAnnotations) ----
 
-
 Dentro de las clases, podemos ponerle etiquetas a los atributos de una clase,
 esto es con la finalidad de definir las restricciones que tendra nuestras tablas.
 Las etiquetas posibles son:
@@ -221,29 +217,139 @@ Esto se lee como: Defino un Indice que de acuerdo al campo definido, voy a crear
 clave llamada "..." que sera unica.
 NOTA: Clave unica significa que ese valor nunca se va a poder repetir.
 
-Para definir una ""Clave Foranea"" deberemos hacer lo siguiente dentro de una clase:
-1- Definir un campo que tenga sea la union entre una Tabla y la otra.
-   Por ejem.: public int EspecialidadId { get; set; }
-2- Definir otro campo que sea del Tipo de la tabla a relacionar.
-   Por ejem.: public Especialidad Especialidad { get; set; }
-3- Arriba del 2do campo creado, le vamos a agregar una etiqueta llamada [FOreignKey],
-   la cual entablara la relacion entre el 1er campo creado y el 2do campo creado que
-   nos llevara a la otra tabla en cuestion
+Para definir la Clave primaria de una Tabla, deberemos escribir arriba de la propiedad
+en cuestion, el denotador "[Key]", de esa manera, definiremos de manera explicita la Clave 
+primaria en una tabla.
 
+
+----- Relaciones de Tablas ----- 
+
+A continuacion mencionaremos todas las maneras de poder relacionar las tablas en EntityFrameworkCore.
+
+*** Relacion 1 a 0:
+Para relacionar una Tabla con otra debemos hacer uso de las "Claves foraneas" [ForeignKey], la cual consiste en 
+determinar una 'propiedad de navegacion' y una 'propiedad de referencia'.
+En otras palabras, vamos a crear lo siguiente:
+- Una propiedad la cual sera hara hara referencia a una Entidad/Tabla ('propiedad de navegacion')
+- Una propiedad propiedad, la cual hara referencia a la "clave primaria" de aquella Entidad/Tabla ('propiedad de referencia')
+
+Una vez dicho esto, definremos ambas propiedades en la que colocaremos el denotador [ForeignKey]
+por encima de la 'propiedad de navegacion' haciendo mencion a la 'propieddad de referencia'
 Quedando por final, asi:
   public int EspecialidadId { get; set; }
         
   [ForeignKey("EspecialidadId")]
   public Especialidad Especialidad { get; set; }
 
-De esta manera, EspecialidadId sera nuestro campo que nos permitira relacionarnos
-con la Tabla Especialidad.
+De esta manera, EspecialidadId sera nuestra 'propieddad de referencia' que nos permitira 
+relacionarnos con la Tabla Especialidad.
 
-Nota: Cuando generemos una busqeuda de datos y querramos traer los datos de la Especialidad
-de nuestra matricula, deberemos escribir algo como:
+*** Relacion 1 a 1:
+
+Para hacer que 2 tablas esten relacionadas entre si en forma 1 a 1, deberemos aplicar en
+la 'Tabla A' el mismo concepto que aplicamos en 'relacion 1 a 0' pero con la diferencia 
+de que en la 'Tabla B', deberemos crear otra 'propedad de navegacion' referida a la
+'Tabla A' pero con denotador encima llamado [InverseProperty].
+Dicho denotador, hara referencia a la 'propiedad de navegacion' de la Tabla A.
+
+Quedando por ejemplo, asi:
+Tabla A: Medico
+------------------------
+  public int EspecialidadId { get; set; }
+        
+  [ForeignKey("EspecialidadId")]
+  public Especialidad Especialidad { get; set; }
+
+Tabla B: Especialidad
+------------------------
+  [InverseProperty("Especialidad")]
+  public Medico Medico {get; set;}
+
+De esta manera, tenemos que  Medico tiene una Especialidad y una Especialidad tiene un Medico.
+(Nota: NO tiene sentido logico, pero es un ejemplo :p)
+
+La Propiedad Inversa de Especialidad hara referencia a la 'Propiedad de navegacion' 
+de la Tabla Medico y como dicha 'propiedad de navegacion' esta con la clave foranea, 
+por medio de Especialidad, podremos acceder a los datos de "Medico" y por medio de "Medico"
+podremos acceder a los datos de "Especialidad".
+
+
+*** Relacion 1 a MUCHOS:
+
+Idem a "Relacion 1 a 1" pero con la diferencia de que en la Tabla B, la "propiedad de navegacion"
+es una lista, quedando por ejemplo: 
+
+Tabla A: Medico
+------------------------
+  public int EspecialidadId { get; set; }
+        
+  [ForeignKey("EspecialidadId")]
+  public Especialidad EspecialidadA { get; set; }
+
+Tabla B: Especialidad
+------------------------
+  [InverseProperty("EspecialidadA")]
+  public List<Medico> Medicos {get; set;}
+
+
+*** Relacion MUCHOS a MUCHOS
+
+Para tener una relacion de MUCHOS a MUCHOS, debemos crear una 3ra Tabla, llamada "Tabla relacional"
+la cual sera el punto de union entre la Tabla A y la Tabla B.
+
+
+Tabla A: Autor
+-----------------
+[InverseProperty("Libro")]
+public List<LibroPorAutor> Libros [get; set;]
+
+
+Tabla B: Libro
+-----------------
+[InverseProperty("Autor")]
+public List<LibroPorAutor> Autores
+
+
+Tabla C: LibroPorAutor (TablaRelacion)
+-----------------------------------
+public int LibroId {get; set;}
+public int AutorId {get; set;}
+
+[ForeignKey("AutorId")]
+public Autor Autor {get; set;}
+
+[ForeignKey("LibroId")]
+public Autor Libro {get; set;}
+
+
+Ejemplos de peticiones a la BD para obtener libros:
+
+1) --> Si entras por libroporautor, podes meter filtros:
+DbManager<LibroPorAutor>().Where(l => l.Libro.Nombre.Contains(text));
+
+2) --> Si entras por autor, obtenes todos sus libros.
+Todos los libros de un autor en particular:
+DbManager<LibroPorAutor>().Where(t => t.Autor == autor);
+
+foreach(LibroPorAutor libroPorAutor in results)
+{
+   Map<Libro>(libroPorAutor.Libro);
+}
+
+3) --> O directamente por el autor.
+
+Autor a = dbManager<Autor>(id);
+Foreach(LibroPorAutor libroPorAutor in a.Libros)
+{
+   Map(libroPorAutor.Libro);
+}
+
+
+**** NOTA PARA LOS TIPOS DE RELACIONES: 
+Cuando generemos una busqeuda de datos y querramos traer los datos de la Especialidad
+de nuestra Tabla Matricula, deberemos escribir algo como:
 _context.Matriculas.Include(Matricula => Matricula.Especialidad)
 (PD: ira el nombr del 2do campo creado.)
-
 
 
 

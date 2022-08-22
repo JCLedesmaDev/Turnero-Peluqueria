@@ -23,10 +23,10 @@ namespace Turnero.BaseDatos.Data.Entidades
     */
 
     [Index(
-    nameof(FechaTurno),
-    nameof(PeluqueroId),
-    Name = "TurnoFechaPeluquero",
-    IsUnique = true)]
+        nameof(FechaTurno),
+        nameof(PeluqueroId),
+        Name = "TurnoFechaPeluquero",
+        IsUnique = true)]
     public class Turno : EntityBase
     {
         [Required(ErrorMessage = "Campo requerido")]

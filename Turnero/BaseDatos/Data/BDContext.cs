@@ -13,14 +13,36 @@ namespace Turnero.BaseDatos.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Peluquero>().HasData(
+               new Peluquero
+               {
+                   Id = 1,
+                   Nombre = "David",
+                   Apellido = "Gonzales",
+                   DNI = "35.214.872",
+                   ImagenPerfil = "",
+                   Password = "ASD"
+               },
+               new Peluquero
+               {
+                   Id = 2,
+                   Nombre = "Eduardo",
+                   Apellido = "Del Valle",
+                   DNI = "25.214.872",
+                   ImagenPerfil = "",
+                   Password = "ASD"
+               }
+            );
 
             modelBuilder.Entity<Turno>().HasData(
                 new Turno
                 {
-                    Id=1, ClienteId=1234,
+                    Id=1, 
+                    ClienteId=1234,
                     FechaCreacion= new DateTime(), 
                     FechaTurno=new DateTime(2022, 8, 22, 17, 30, 00),
-                    PeluqueroId=1
+                    PeluqueroId=1,
+                    
                 },
                 new Turno
                 {
@@ -46,37 +68,17 @@ namespace Turnero.BaseDatos.Data
                 {
                     Id=1234, Nombre = "Mariano",
                     Apellido="Cejas", NumeroTelefono="35124789",
-                    TurnoId=1,
                 },
                 new Cliente
                 {
                     Id = 3456, Nombre = "Nacho",
                     Apellido = "Aguada", NumeroTelefono = "35124789",
-                    TurnoId = 2,
                 },
                 new Cliente
                 {
                     Id = 2345, Nombre = "Tincho",
                     Apellido = "Marin", NumeroTelefono = "35124789",
-                    TurnoId = 3,
                 } 
-            );
-
-
-            modelBuilder.Entity<Peluquero>().HasData(
-               new Peluquero { 
-                   Id = 1, Nombre = "David", 
-                   Apellido="Gonzales", DNI="35.214.872", 
-                   ImagenPerfil="", Password="ASD", 
-                   //ListaTurnos = new List<Turno>()
-               },
-               new Peluquero
-               {
-                   Id = 2, Nombre = "Eduardo",
-                   Apellido = "Del Valle",DNI = "25.214.872",
-                   ImagenPerfil = "", Password = "ASD",
-                   //ListaTurnos = new List<Turno>()
-               }
             );
 
         }

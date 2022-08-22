@@ -16,7 +16,7 @@ namespace Turnero.BaseDatos.Data
             modelBuilder.Entity<Peluquero>().HasData(
                new Peluquero
                {
-                   Id = 1,
+                   Id = 11,
                    Nombre = "David",
                    Apellido = "Gonzales",
                    DNI = "35.214.872",
@@ -25,7 +25,7 @@ namespace Turnero.BaseDatos.Data
                },
                new Peluquero
                {
-                   Id = 2,
+                   Id = 23,
                    Nombre = "Eduardo",
                    Apellido = "Del Valle",
                    DNI = "25.214.872",
@@ -41,8 +41,7 @@ namespace Turnero.BaseDatos.Data
                     ClienteId=1234,
                     FechaCreacion= new DateTime(), 
                     FechaTurno=new DateTime(2022, 8, 22, 17, 30, 00),
-                    PeluqueroId=1,
-                    
+                    PeluqueroId= 11,                    
                 },
                 new Turno
                 {
@@ -50,7 +49,7 @@ namespace Turnero.BaseDatos.Data
                     ClienteId = 3456,
                     FechaCreacion = new DateTime(),
                     FechaTurno = new DateTime(2022, 9, 22, 17, 30, 00),
-                    PeluqueroId = 1
+                    PeluqueroId = 11
                 },
                 new Turno
                 {
@@ -58,10 +57,9 @@ namespace Turnero.BaseDatos.Data
                     ClienteId = 2345,
                     FechaCreacion = new DateTime(),
                     FechaTurno = new DateTime(2022, 9, 22, 17, 30, 00),
-                    PeluqueroId = 2
+                    PeluqueroId = 23
                 }
             );
-
 
             modelBuilder.Entity<Cliente>().HasData(
                 new Cliente
@@ -83,12 +81,9 @@ namespace Turnero.BaseDatos.Data
 
         }
 
-
         public DbSet<Turno> TablaTurnos { get; set; }
         public DbSet<Cliente> TablaClientes { get; set; }
         public DbSet<Peluquero> TablaPeluqueros { get; set; }
-
-
 
     }
 }

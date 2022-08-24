@@ -20,7 +20,7 @@ namespace Turnero.Server.Controllers
         }
 
         [HttpPost("consult")]
-        public async Task<ActionResult<ResponseDto<string>>> ConsultarTurno(DateTime FechaHora, PeluqueroDto Peluquero)
+        public async Task<ActionResult<ResponseDto<string>>> ConsultarTurno(ConsultaDto Consulta)
         {
 
             ResponseDto<string> Response = new ResponseDto<string>();
@@ -28,8 +28,9 @@ namespace Turnero.Server.Controllers
             try
             {
                 /// TODO: Agregar validacion de fecha.
+                /// 
                     
-                if (!TryValidateModel(Peluquero))
+                if (!TryValidateModel(Consulta))
                 {
                     throw new InvalidDataException(
                         JsonSerializer.Serialize(

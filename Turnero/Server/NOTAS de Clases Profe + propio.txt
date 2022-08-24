@@ -230,10 +230,10 @@ A continuacion mencionaremos todas las maneras de poder relacionar las tablas en
 Para relacionar una Tabla con otra debemos hacer uso de las "Claves foraneas" [ForeignKey], la cual consiste en 
 determinar una 'propiedad de navegacion' y una 'propiedad de referencia'.
 En otras palabras, vamos a crear lo siguiente:
-- Una propiedad la cual sera hara hara referencia a una Entidad/Tabla ('propiedad de navegacion')
-- Una propiedad propiedad, la cual hara referencia a la "clave primaria" de aquella Entidad/Tabla ('propiedad de referencia')
+- Una propiedad la cual hara de referencia a una Entidad/Tabla ('propiedad de navegacion')
+- Una propiedad la cual hara referencia a la "clave primaria" de aquella Entidad/Tabla ('propiedad de referencia')
 
-Una vez dicho esto, definremos ambas propiedades en la que colocaremos el denotador [ForeignKey]
+Una vez dicho esto, definiremos ambas propiedades en la que colocaremos el denotador [ForeignKey]
 por encima de la 'propiedad de navegacion' haciendo mencion a la 'propieddad de referencia'
 Quedando por final, asi:
   public int EspecialidadId { get; set; }

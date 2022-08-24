@@ -2,6 +2,9 @@
 #region Usings globales para todo le proyecto Server 
 
 global using Microsoft.EntityFrameworkCore;
+global using Turnero.Helper;
+global using Turnero.Shared.Comun;
+global using Turnero.Shared.DTO_Back.Peluquero;
 
 #endregion Usings globales para todo le proyecto Server */
 
@@ -33,6 +36,16 @@ builder.Services.AddSwaggerGen(config =>
 });
 
 #endregion Juan: Conexion a Base Datos y Config de Swagger
+
+
+#region Desactivamos la validacion automatica del modelState
+
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
+
+#endregion
 
 
 var app = builder.Build();

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Turnero.BaseDatos.Data;
 using Turnero.BaseDatos.Data.Entidades;
 using System.Text.Json;
-using Turnero.Shared.Comun;
 
 namespace Turnero.Server.Controllers
 {
@@ -21,10 +20,10 @@ namespace Turnero.Server.Controllers
         }
 
         [HttpPost("consult")]
-        public async Task<ActionResult<Response<string>>> ConsultarTurno(DateTime FechaHora, PeluqueroDto Peluquero)
+        public async Task<ActionResult<ResponseDto<string>>> ConsultarTurno(DateTime FechaHora, PeluqueroDto Peluquero)
         {
 
-            Response<string> Response = new Response<string>();
+            ResponseDto<string> Response = new ResponseDto<string>();
 
             try
             {

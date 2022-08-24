@@ -29,16 +29,9 @@ namespace Turnero.BaseDatos.Data.Entidades
         IsUnique = true)]
     public class Turno : EntityBase
     {
-        [Required(ErrorMessage = "Campo requerido")]
         public DateTime FechaTurno { get; set; }
-        
-        [Required(ErrorMessage = "Campo requerido")]
         public int PeluqueroId { get; set; }
-        
-        [Required(ErrorMessage = "Campo requerido")]
         public int ClienteId { get; set; }
-     
-        [Required(ErrorMessage = "Campo requerido")]
         public DateTime FechaCreacion { get; set; }
 
         

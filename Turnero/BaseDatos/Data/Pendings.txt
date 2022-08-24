@@ -1,2 +1,0 @@
-﻿Pasar los denotadores de required, etc a los DTO en vez de las Entidades
-y dejar en entidades solo los denotadores de Key, ForeanKey, InvertProperty e Index.

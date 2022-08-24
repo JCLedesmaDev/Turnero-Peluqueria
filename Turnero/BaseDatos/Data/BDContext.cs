@@ -65,7 +65,7 @@ namespace Turnero.BaseDatos.Data
                 new Cliente
                 {
                     Id=1234, Nombre = "Mariano",
-                    Apellido="Cejas", NumeroTelefono="35124789",
+                    Apellido="Cejas", NumeroTelefono="123123",
                 },
                 new Cliente
                 {
@@ -75,7 +75,7 @@ namespace Turnero.BaseDatos.Data
                 new Cliente
                 {
                     Id = 2345, Nombre = "Tincho",
-                    Apellido = "Marin", NumeroTelefono = "35124789",
+                    Apellido = "Marin", NumeroTelefono = "5234",
                 } 
             );
 

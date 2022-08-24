@@ -4,7 +4,8 @@
 global using Microsoft.EntityFrameworkCore;
 global using Turnero.Helper;
 global using Turnero.Shared.Comun;
-global using Turnero.Shared.DTO_Back.Peluquero;
+global using Turnero.Shared.DTO_Back;
+global using Turnero.Shared.DTO_Front;
 
 #endregion Usings globales para todo le proyecto Server */
 

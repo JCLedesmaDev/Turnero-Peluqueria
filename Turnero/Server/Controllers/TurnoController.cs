@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc;
 using Turnero.BaseDatos.Data;
 using Turnero.BaseDatos.Data.Entidades;
-
+using System.Text.Json;
+using Turnero.Shared.Comun;
 
 namespace Turnero.Server.Controllers
 {
@@ -12,6 +13,7 @@ namespace Turnero.Server.Controllers
     {
 
         private readonly BDContext _context;
+        //private readonly ErrorHelper _errorHelper;
 
         public TurnoController(BDContext BDContext)
         {
@@ -19,17 +21,39 @@ namespace Turnero.Server.Controllers
         }
 
         [HttpPost("consult")]
-        public async Task<IActionResult> consultarTurno(DateTime FechaHora, Peluquero peluquero)
+        public async Task<ActionResult<Response<string>>> ConsultarTurno(DateTime FechaHora, PeluqueroDto Peluquero)
         {
 
-            if (!ModelState.IsValid)
-            { 
-               ModelState.Values
-               .SelectMany(v => v.Errors)
-               .Select(e => e.ErrorMessage);                
-            }
+            Response<string> Response = new Response<string>();
 
-            return Ok("PUTO");
+            try
+            {
+                /// TODO: Agregar validacion de fecha.
+                    
+                if (!TryValidateModel(Peluquero))
+                {
+                    throw new InvalidDataException(
+                        JsonSerializer.Serialize(
+                             ErrorHelper.GetModelStateErrors(ModelState)
+                        ).ToString()
+                    );
+                }
+
+                Response.Data = "LALALLA";
+
+            }
+            catch (InvalidDataException ex) 
+            {
+                Response.ErrorModels = JsonSerializer.Deserialize <List<ModelErrors>>(ex.Message);
+                return BadRequest(Response);
+            }
+            catch (Exception ex)
+            {
+                Response.MessageError = ex.Message;
+                return BadRequest(Response);
+            }
+            
+            return Ok(Response);
         }
     }
 }

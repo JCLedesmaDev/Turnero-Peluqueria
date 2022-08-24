@@ -58,7 +58,7 @@ app.UseSwaggerUI(config =>
 {
     config.SwaggerEndpoint(
         "/swagger/v1/swagger.json",
-        "Locacion v1"
+        "Peluqeuria v1"
     );
 });
 

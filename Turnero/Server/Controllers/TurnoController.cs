@@ -20,15 +20,31 @@ namespace Turnero.Server.Controllers
         }
 
         [HttpPost("consult")]
-        public async Task<ActionResult<ResponseDto<string>>> ConsultarTurno(DateTime FechaHora, PeluqueroDto Peluquero)
+        public async Task<ActionResult<ResponseDto<string>>> ConsultarTurno(ConsultaTurnoDto Consulta)
         {
-
             ResponseDto<string> Response = new ResponseDto<string>();
 
             try
             {
-                if (!TryValidateModel(Peluquero))
+                bool FechaValidate = Consulta?.FechaHoraCorte == null || Consulta.FechaHoraCorte <= DateTime.Now;
+                bool IdPeluqueroValidate = Consulta?.IdPeluquero == null || Consulta?.IdPeluquero == 0;
+
+                if (!TryValidateModel(Consulta) || FechaValidate || IdPeluqueroValidate)
                 {
+                    if (FechaValidate)
+                    {
+                        ModelState.AddModelError(
+                            "Fecha Hora Corte", "La fecha debe ser mayor o igual a la fecha actual"
+                        );
+                    }
+
+                    if (IdPeluqueroValidate)
+                    {
+                        ModelState.AddModelError(
+                            "Peluquero", "Debe ingresar el Id del peluquero."
+                        );
+                    }
+
                     throw new InvalidDataException(
                         JsonSerializer.Serialize(
                              ErrorHelper.GetModelStateErrors(ModelState)
@@ -36,10 +52,12 @@ namespace Turnero.Server.Controllers
                     );
                 }
 
-                if (FechaHora == null || FechaHora < DateTime.Now)
-                {
-                    throw new Exception("Ha ocurrido un error con la Fecha ingresada, intentelo de nuevo. :D ");
-                }
+                /* CONTINUA TODO LO RELACIONADO A LA LOGICA
+                 -> Buscar datos peluquero ( + validaciones )
+                 -> Agregar tiempo extra a la FechaHoraCorte
+                 -> Buscar turnos con la fecha coincicente entre FechaHoraCorte + Extra. ( + validaciones ) 
+                 
+                 */
 
 
                 Response.Data = "LALALLA";

@@ -7,13 +7,11 @@ namespace Turnero.Helper
 {
     public class ErrorHelper
     {
-
         public static List<ModelErrors> GetModelStateErrors(ModelStateDictionary Model)
         {
             return Model.Select(x=> new ModelErrors(){ 
-                Key = x.Key, 
-                Messages = x.Value.Errors.Select(y=>y.ErrorMessage).ToList()
-
+                Key = x.Key,
+                Messages = x.Value.Errors.Select(y => y.ErrorMessage).ToList()
             }).ToList();
         }
     }

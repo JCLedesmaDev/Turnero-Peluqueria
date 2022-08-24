@@ -20,17 +20,14 @@ namespace Turnero.Server.Controllers
         }
 
         [HttpPost("consult")]
-        public async Task<ActionResult<ResponseDto<string>>> ConsultarTurno(ConsultaDto Consulta)
+        public async Task<ActionResult<ResponseDto<string>>> ConsultarTurno(DateTime FechaHora, PeluqueroDto Peluquero)
         {
 
             ResponseDto<string> Response = new ResponseDto<string>();
 
             try
             {
-                /// TODO: Agregar validacion de fecha.
-                /// 
-                    
-                if (!TryValidateModel(Consulta))
+                if (!TryValidateModel(Peluquero))
                 {
                     throw new InvalidDataException(
                         JsonSerializer.Serialize(
@@ -38,6 +35,12 @@ namespace Turnero.Server.Controllers
                         ).ToString()
                     );
                 }
+
+                if (FechaHora == null || FechaHora < DateTime.Now)
+                {
+                    throw new Exception("Ha ocurrido un error con la Fecha ingresada, intentelo de nuevo. :D ");
+                }
+
 
                 Response.Data = "LALALLA";
 

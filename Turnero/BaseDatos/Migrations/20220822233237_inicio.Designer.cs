@@ -12,19 +12,19 @@ using Turnero.BaseDatos.Data;
 namespace Turnero.BaseDatos.Migrations
 {
     [DbContext(typeof(BDContext))]
-    [Migration("20220626221802_Inicial")]
-    partial class Inicial
+    [Migration("20220822233237_inicio")]
+    partial class inicio
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.6")
+                .HasAnnotation("ProductVersion", "6.0.8")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Turnero.Shared.Cliente", b =>
+            modelBuilder.Entity("Turnero.BaseDatos.Data.Entidades.Cliente", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -37,7 +37,7 @@ namespace Turnero.BaseDatos.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<string>("NombreCompleto")
+                    b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -53,15 +53,43 @@ namespace Turnero.BaseDatos.Migrations
                         .IsUnique();
 
                     b.ToTable("TablaClientes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1234,
+                            Apellido = "Cejas",
+                            Nombre = "Mariano",
+                            NumeroTelefono = "123123"
+                        },
+                        new
+                        {
+                            Id = 3456,
+                            Apellido = "Aguada",
+                            Nombre = "Nacho",
+                            NumeroTelefono = "35124789"
+                        },
+                        new
+                        {
+                            Id = 2345,
+                            Apellido = "Marin",
+                            Nombre = "Tincho",
+                            NumeroTelefono = "5234"
+                        });
                 });
 
-            modelBuilder.Entity("Turnero.Shared.Peluquero", b =>
+            modelBuilder.Entity("Turnero.BaseDatos.Data.Entidades.Peluquero", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Apellido")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("DNI")
                         .IsRequired()
@@ -72,7 +100,7 @@ namespace Turnero.BaseDatos.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("NombreCompleto")
+                    b.Property<string>("Nombre")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
@@ -88,9 +116,29 @@ namespace Turnero.BaseDatos.Migrations
                         .IsUnique();
 
                     b.ToTable("TablaPeluqueros");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 11,
+                            Apellido = "Gonzales",
+                            DNI = "35.214.872",
+                            ImagenPerfil = "",
+                            Nombre = "David",
+                            Password = "ASD"
+                        },
+                        new
+                        {
+                            Id = 23,
+                            Apellido = "Del Valle",
+                            DNI = "25.214.872",
+                            ImagenPerfil = "",
+                            Nombre = "Eduardo",
+                            Password = "ASD"
+                        });
                 });
 
-            modelBuilder.Entity("Turnero.Shared.Turno", b =>
+            modelBuilder.Entity("Turnero.BaseDatos.Data.Entidades.Turno", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -112,26 +160,51 @@ namespace Turnero.BaseDatos.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClienteId")
-                        .IsUnique();
+                    b.HasIndex("ClienteId");
 
                     b.HasIndex("PeluqueroId");
 
-                    b.HasIndex(new[] { "FechaTurno", "PeluqueroId", "ClienteId" }, "TurnoFechaPeluqueroCliente")
+                    b.HasIndex(new[] { "FechaTurno", "PeluqueroId" }, "TurnoFechaPeluquero")
                         .IsUnique();
 
                     b.ToTable("TablaTurnos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ClienteId = 1234,
+                            FechaCreacion = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurno = new DateTime(2022, 8, 22, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            PeluqueroId = 11
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ClienteId = 3456,
+                            FechaCreacion = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurno = new DateTime(2022, 9, 22, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            PeluqueroId = 11
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ClienteId = 2345,
+                            FechaCreacion = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurno = new DateTime(2022, 9, 22, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            PeluqueroId = 23
+                        });
                 });
 
-            modelBuilder.Entity("Turnero.Shared.Turno", b =>
+            modelBuilder.Entity("Turnero.BaseDatos.Data.Entidades.Turno", b =>
                 {
-                    b.HasOne("Turnero.Shared.Cliente", "Cliente")
-                        .WithOne("Turno")
-                        .HasForeignKey("Turnero.Shared.Turno", "ClienteId")
+                    b.HasOne("Turnero.BaseDatos.Data.Entidades.Cliente", "Cliente")
+                        .WithMany("ListaTurnos")
+                        .HasForeignKey("ClienteId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Turnero.Shared.Peluquero", "Peluquero")
+                    b.HasOne("Turnero.BaseDatos.Data.Entidades.Peluquero", "Peluquero")
                         .WithMany("ListaTurnos")
                         .HasForeignKey("PeluqueroId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -142,13 +215,12 @@ namespace Turnero.BaseDatos.Migrations
                     b.Navigation("Peluquero");
                 });
 
-            modelBuilder.Entity("Turnero.Shared.Cliente", b =>
+            modelBuilder.Entity("Turnero.BaseDatos.Data.Entidades.Cliente", b =>
                 {
-                    b.Navigation("Turno")
-                        .IsRequired();
+                    b.Navigation("ListaTurnos");
                 });
 
-            modelBuilder.Entity("Turnero.Shared.Peluquero", b =>
+            modelBuilder.Entity("Turnero.BaseDatos.Data.Entidades.Peluquero", b =>
                 {
                     b.Navigation("ListaTurnos");
                 });

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Turnero.BaseDatos.Migrations
 {
-    public partial class Inicial : Migration
+    public partial class inicio : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -15,7 +15,7 @@ namespace Turnero.BaseDatos.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NombreCompleto = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Apellido = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     NumeroTelefono = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false)
                 },
@@ -30,8 +30,9 @@ namespace Turnero.BaseDatos.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    NombreCompleto = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Nombre = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     ImagenPerfil = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Apellido = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     Password = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     DNI = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false)
                 },
@@ -68,6 +69,40 @@ namespace Turnero.BaseDatos.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.InsertData(
+                table: "TablaClientes",
+                columns: new[] { "Id", "Apellido", "Nombre", "NumeroTelefono" },
+                values: new object[,]
+                {
+                    { 1234, "Cejas", "Mariano", "123123" },
+                    { 2345, "Marin", "Tincho", "5234" },
+                    { 3456, "Aguada", "Nacho", "35124789" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "TablaPeluqueros",
+                columns: new[] { "Id", "Apellido", "DNI", "ImagenPerfil", "Nombre", "Password" },
+                values: new object[,]
+                {
+                    { 11, "Gonzales", "35.214.872", "", "David", "ASD" },
+                    { 23, "Del Valle", "25.214.872", "", "Eduardo", "ASD" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "TablaTurnos",
+                columns: new[] { "Id", "ClienteId", "FechaCreacion", "FechaTurno", "PeluqueroId" },
+                values: new object[] { 1, 1234, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 8, 22, 17, 30, 0, 0, DateTimeKind.Unspecified), 11 });
+
+            migrationBuilder.InsertData(
+                table: "TablaTurnos",
+                columns: new[] { "Id", "ClienteId", "FechaCreacion", "FechaTurno", "PeluqueroId" },
+                values: new object[] { 2, 3456, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 9, 22, 17, 30, 0, 0, DateTimeKind.Unspecified), 11 });
+
+            migrationBuilder.InsertData(
+                table: "TablaTurnos",
+                columns: new[] { "Id", "ClienteId", "FechaCreacion", "FechaTurno", "PeluqueroId" },
+                values: new object[] { 3, 2345, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 9, 22, 17, 30, 0, 0, DateTimeKind.Unspecified), 23 });
+
             migrationBuilder.CreateIndex(
                 name: "ClienteNumeroTelefono_UQ",
                 table: "TablaClientes",
@@ -83,8 +118,7 @@ namespace Turnero.BaseDatos.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_TablaTurnos_ClienteId",
                 table: "TablaTurnos",
-                column: "ClienteId",
-                unique: true);
+                column: "ClienteId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_TablaTurnos_PeluqueroId",
@@ -92,9 +126,9 @@ namespace Turnero.BaseDatos.Migrations
                 column: "PeluqueroId");
 
             migrationBuilder.CreateIndex(
-                name: "TurnoFechaPeluqueroCliente",
+                name: "TurnoFechaPeluquero",
                 table: "TablaTurnos",
-                columns: new[] { "FechaTurno", "PeluqueroId", "ClienteId" },
+                columns: new[] { "FechaTurno", "PeluqueroId" },
                 unique: true);
         }
 

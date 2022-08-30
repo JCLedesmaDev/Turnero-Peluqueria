@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Turnero.BaseDatos.Data;
-using Turnero.BaseDatos.Data.Entidades;
 using System.Text.Json;
 
 namespace Turnero.Server.Controllers
@@ -12,7 +10,6 @@ namespace Turnero.Server.Controllers
     {
 
         private readonly BDContext _context;
-        //private readonly ErrorHelper _errorHelper;
 
         public TurnoController(BDContext BDContext)
         {
@@ -20,9 +17,10 @@ namespace Turnero.Server.Controllers
         }
 
         [HttpPost("consult")]
-        public async Task<ActionResult<ResponseDto<string>>> ConsultarTurno(ConsultaTurnoDto Consulta)
+        //public async Task<ActionResult<ResponseDto<string>>> ConsultarTurnoReservado(ConsultaTurnoDto Consulta)
+        public async Task<ActionResult<ResponseDto<List<Turno>>>> ConsultarTurnoReservado(ConsultaTurnoDto Consulta)
         {
-            ResponseDto<string> Response = new ResponseDto<string>();
+            ResponseDto<List<Turno>> Response = new ResponseDto<List<Turno>>();
 
             try
             {
@@ -52,6 +50,18 @@ namespace Turnero.Server.Controllers
                     );
                 }
 
+                List<Turno> TurnosPeluquero = await this._context.TablaTurnos
+                    .Where(Turno => Turno.PeluqueroId == Consulta.IdPeluquero)
+                    .Include(Turno => Turno.Peluquero)
+                    .Include(Turno => Turno.Cliente)
+                    .ToListAsync();
+
+
+                if (TurnosPeluquero == null)
+                {
+                    throw new Exception("No se ha encotrado a este peluquero.");
+                }
+
                 /* CONTINUA TODO LO RELACIONADO A LA LOGICA
                  -> Buscar datos peluquero ( + validaciones )
                  -> Agregar tiempo extra a la FechaHoraCorte
@@ -59,8 +69,8 @@ namespace Turnero.Server.Controllers
                  
                  */
 
-
-                Response.Data = "LALALLA";
+                // TODO: VER DE QUE NO ME DEVUELVE TODOS LSO DATOS SINO ALGUNOS NULL, VER QUE ESTA RELACIONADO CON EL PROGRAM.CS Linea 55
+                Response.Data = TurnosPeluquero;
 
             }
             catch (InvalidDataException ex) 

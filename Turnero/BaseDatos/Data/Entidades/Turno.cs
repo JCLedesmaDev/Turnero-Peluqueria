@@ -34,7 +34,8 @@ namespace Turnero.BaseDatos.Data.Entidades
         public int ClienteId { get; set; }
         public DateTime FechaCreacion { get; set; }
 
-        
+        /// TODO: Agregar prop de FechaTurno + 30 min de corte para hacer comparaciones en BD
+
         [ForeignKey("PeluqueroId")]
         public Peluquero Peluquero { get; set; }
 

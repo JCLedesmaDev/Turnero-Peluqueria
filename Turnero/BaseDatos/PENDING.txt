@@ -1,0 +1,1 @@
+﻿Agregar denotador MaxLength en las entidades

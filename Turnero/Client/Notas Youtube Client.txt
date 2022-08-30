@@ -44,6 +44,11 @@ Existen 3 metodos dentro del ciclo de vida:
     Se ejecuta cada vez que el parametro que recibe una pagina es actualizado.
     Nota: Cuando tenemos un @page "home/{id: int}"
 
+4) Dispose(): 
+     Elimina recursos no administrados cuando el componente se elimina de la interfaz del usuario.
+     Ergo, elimina el recurso de escuchar los cambios del Store. 
+     Nota: Utilziar @implements IDispose.
+
 https://www.netmentor.es/entrada/ciclo-vida-componentes-blazor
 
 -------> Ejecucion de eventos HTML: <---------------

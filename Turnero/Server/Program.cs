@@ -2,6 +2,8 @@
 #region Usings globales para todo le proyecto Server 
 
 global using Microsoft.EntityFrameworkCore;
+global using Turnero.BaseDatos.Data;
+global using Turnero.BaseDatos.Data.Entidades;
 global using Turnero.Helper;
 global using Turnero.Shared.Comun;
 global using Turnero.Shared.DTO_Back;
@@ -10,7 +12,7 @@ global using Turnero.Shared.DTO_Front;
 #endregion Usings globales para todo le proyecto Server */
 
 using Microsoft.OpenApi.Models;
-using Turnero.BaseDatos.Data;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,6 +46,16 @@ builder.Services.AddSwaggerGen(config =>
 builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;
+});
+
+#endregion
+
+#region Evite que se genere un posible ciclo de objetos a la hora de realizar consutlas a la BD
+
+builder.Services.AddControllers().AddJsonOptions(options =>
+{
+    options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+    options.JsonSerializerOptions.WriteIndented = true;
 });
 
 #endregion

@@ -39,7 +39,7 @@ namespace Turnero.BaseDatos.Data
                 {
                     Id=1, 
                     ClienteId=1234,
-                    FechaCreacion= new DateTime(), 
+                    FechaCreacion= new DateTime(2022, 8, 19, 14, 22, 00), 
                     FechaTurno=new DateTime(2022, 8, 22, 17, 30, 00),
                     PeluqueroId= 11,                    
                 },
@@ -47,16 +47,16 @@ namespace Turnero.BaseDatos.Data
                 {
                     Id = 2,
                     ClienteId = 3456,
-                    FechaCreacion = new DateTime(),
-                    FechaTurno = new DateTime(2022, 9, 22, 17, 30, 00),
+                    FechaCreacion = new DateTime(2022, 9, 14, 17, 30, 00),
+                    FechaTurno = new DateTime(2022, 9, 23, 17, 30, 00),
                     PeluqueroId = 11
                 },
                 new Turno
                 {
                     Id = 3,
                     ClienteId = 2345,
-                    FechaCreacion = new DateTime(),
-                    FechaTurno = new DateTime(2022, 9, 22, 17, 30, 00),
+                    FechaCreacion = new DateTime(2022, 9, 02, 17, 30, 00),
+                    FechaTurno = new DateTime(2022, 9, 12, 17, 30, 00),
                     PeluqueroId = 23
                 }
             );

@@ -39,24 +39,27 @@ namespace Turnero.BaseDatos.Data
                 {
                     Id=1, 
                     ClienteId=1234,
-                    FechaCreacion= new DateTime(2022, 8, 19, 14, 22, 00), 
-                    FechaTurno=new DateTime(2022, 8, 22, 17, 30, 00),
+                    FechaCreacionTurno = new DateTime(2022, 8, 19, 14, 22, 00),
+                    FechaTurnoReservado = new DateTime(2022, 10, 22, 18, 30, 00),
+                    FechaTurnoReservadoFinal = new DateTime(2022, 01, 22, 19, 00, 00),
                     PeluqueroId= 11,                    
                 },
                 new Turno
                 {
                     Id = 2,
                     ClienteId = 3456,
-                    FechaCreacion = new DateTime(2022, 9, 14, 17, 30, 00),
-                    FechaTurno = new DateTime(2022, 9, 23, 17, 30, 00),
+                    FechaCreacionTurno = new DateTime(2022, 9, 14, 17, 30, 00),
+                    FechaTurnoReservado = new DateTime(2022, 9, 23, 16, 30, 00),
+                    FechaTurnoReservadoFinal = new DateTime(2022, 9, 23, 17, 00, 00),
                     PeluqueroId = 11
                 },
                 new Turno
                 {
                     Id = 3,
                     ClienteId = 2345,
-                    FechaCreacion = new DateTime(2022, 9, 02, 17, 30, 00),
-                    FechaTurno = new DateTime(2022, 9, 12, 17, 30, 00),
+                    FechaCreacionTurno = new DateTime(2022, 9, 02, 17, 30, 00),
+                    FechaTurnoReservado = new DateTime(2022, 9, 12, 17, 30, 00),
+                    FechaTurnoReservadoFinal = new DateTime(2022, 9, 12, 18, 00, 00),
                     PeluqueroId = 23
                 }
             );

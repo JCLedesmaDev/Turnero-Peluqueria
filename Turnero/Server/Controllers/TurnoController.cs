@@ -50,20 +50,31 @@ namespace Turnero.Server.Controllers
                     );
                 }
 
-                List<Turno> TurnosPeluquero = await this._context.TablaTurnos
+                Peluquero peluquero = await this._context.TablaPeluqueros
+                    .FirstOrDefaultAsync( Peluquero => Peluquero.Id == Consulta.IdPeluquero);
+
+                if (peluquero == null)
+                {
+                    throw new Exception("No se ha encotrado a este peluquero.");
+                }
+
+                List<Turno> TurnosReservados = await this._context.TablaTurnos
                     .Where(Turno => Turno.PeluqueroId == Consulta.IdPeluquero)
+                    .Where(Turno => 
+                        Consulta.FechaHoraCorte >= Turno.FechaTurnoReservado && 
+                        Consulta.FechaHoraCorte <= Turno.FechaTurnoReservadoFinal
+                     ) // Observar
                     .Include(Turno => Turno.Peluquero)
                     .Include(Turno => Turno.Cliente)
                     .ToListAsync();
 
 
-                if (TurnosPeluquero == null)
+                //if (TurnosPeluquero.Count == 0)
                 {
-                    throw new Exception("No se ha encotrado a este peluquero.");
-                }
+                    //Response.Data = "La fecha ingresada se encuentra disponible para reservar."
+                //}
 
                 /* CONTINUA TODO LO RELACIONADO A LA LOGICA
-                 -> Buscar datos peluquero ( + validaciones )
                  -> Agregar tiempo extra a la FechaHoraCorte
                  -> Buscar turnos con la fecha coincicente entre FechaHoraCorte + Extra. ( + validaciones ) 
                  

@@ -48,10 +48,11 @@ namespace Turnero.BaseDatos.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FechaTurno = table.Column<DateTime>(type: "datetime2", nullable: false),
                     PeluqueroId = table.Column<int>(type: "int", nullable: false),
                     ClienteId = table.Column<int>(type: "int", nullable: false),
-                    FechaCreacion = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    FechaCreacionTurno = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaTurnoReservado = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaTurnoReservadoFinal = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -91,18 +92,18 @@ namespace Turnero.BaseDatos.Migrations
 
             migrationBuilder.InsertData(
                 table: "TablaTurnos",
-                columns: new[] { "Id", "ClienteId", "FechaCreacion", "FechaTurno", "PeluqueroId" },
-                values: new object[] { 1, 1234, new DateTime(2022, 8, 19, 14, 22, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 8, 22, 17, 30, 0, 0, DateTimeKind.Unspecified), 11 });
+                columns: new[] { "Id", "ClienteId", "FechaCreacionTurno", "FechaTurnoReservado", "FechaTurnoReservadoFinal", "PeluqueroId" },
+                values: new object[] { 1, 1234, new DateTime(2022, 8, 19, 14, 22, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 10, 22, 18, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 1, 22, 19, 0, 0, 0, DateTimeKind.Unspecified), 11 });
 
             migrationBuilder.InsertData(
                 table: "TablaTurnos",
-                columns: new[] { "Id", "ClienteId", "FechaCreacion", "FechaTurno", "PeluqueroId" },
-                values: new object[] { 2, 3456, new DateTime(2022, 9, 14, 17, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 9, 23, 17, 30, 0, 0, DateTimeKind.Unspecified), 11 });
+                columns: new[] { "Id", "ClienteId", "FechaCreacionTurno", "FechaTurnoReservado", "FechaTurnoReservadoFinal", "PeluqueroId" },
+                values: new object[] { 2, 3456, new DateTime(2022, 9, 14, 17, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 9, 23, 16, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 9, 23, 17, 0, 0, 0, DateTimeKind.Unspecified), 11 });
 
             migrationBuilder.InsertData(
                 table: "TablaTurnos",
-                columns: new[] { "Id", "ClienteId", "FechaCreacion", "FechaTurno", "PeluqueroId" },
-                values: new object[] { 3, 2345, new DateTime(2022, 9, 2, 17, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 9, 12, 17, 30, 0, 0, DateTimeKind.Unspecified), 23 });
+                columns: new[] { "Id", "ClienteId", "FechaCreacionTurno", "FechaTurnoReservado", "FechaTurnoReservadoFinal", "PeluqueroId" },
+                values: new object[] { 3, 2345, new DateTime(2022, 9, 2, 17, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 9, 12, 17, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 9, 12, 18, 0, 0, 0, DateTimeKind.Unspecified), 23 });
 
             migrationBuilder.CreateIndex(
                 name: "ClienteNumeroTelefono_UQ",
@@ -129,7 +130,7 @@ namespace Turnero.BaseDatos.Migrations
             migrationBuilder.CreateIndex(
                 name: "TurnoFechaPeluquero",
                 table: "TablaTurnos",
-                columns: new[] { "FechaTurno", "PeluqueroId" },
+                columns: new[] { "FechaTurnoReservado", "PeluqueroId" },
                 unique: true);
         }
 

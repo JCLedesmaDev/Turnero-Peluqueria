@@ -147,10 +147,13 @@ namespace Turnero.BaseDatos.Migrations
                     b.Property<int>("ClienteId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("FechaCreacion")
+                    b.Property<DateTime>("FechaCreacionTurno")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaTurno")
+                    b.Property<DateTime>("FechaTurnoReservado")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaTurnoReservadoFinal")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("PeluqueroId")
@@ -162,7 +165,7 @@ namespace Turnero.BaseDatos.Migrations
 
                     b.HasIndex("PeluqueroId");
 
-                    b.HasIndex(new[] { "FechaTurno", "PeluqueroId" }, "TurnoFechaPeluquero")
+                    b.HasIndex(new[] { "FechaTurnoReservado", "PeluqueroId" }, "TurnoFechaPeluquero")
                         .IsUnique();
 
                     b.ToTable("TablaTurnos");
@@ -172,24 +175,27 @@ namespace Turnero.BaseDatos.Migrations
                         {
                             Id = 1,
                             ClienteId = 1234,
-                            FechaCreacion = new DateTime(2022, 8, 19, 14, 22, 0, 0, DateTimeKind.Unspecified),
-                            FechaTurno = new DateTime(2022, 8, 22, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaCreacionTurno = new DateTime(2022, 8, 19, 14, 22, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurnoReservado = new DateTime(2022, 10, 22, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurnoReservadoFinal = new DateTime(2022, 1, 22, 19, 0, 0, 0, DateTimeKind.Unspecified),
                             PeluqueroId = 11
                         },
                         new
                         {
                             Id = 2,
                             ClienteId = 3456,
-                            FechaCreacion = new DateTime(2022, 9, 14, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            FechaTurno = new DateTime(2022, 9, 23, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaCreacionTurno = new DateTime(2022, 9, 14, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurnoReservado = new DateTime(2022, 9, 23, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurnoReservadoFinal = new DateTime(2022, 9, 23, 17, 0, 0, 0, DateTimeKind.Unspecified),
                             PeluqueroId = 11
                         },
                         new
                         {
                             Id = 3,
                             ClienteId = 2345,
-                            FechaCreacion = new DateTime(2022, 9, 2, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            FechaTurno = new DateTime(2022, 9, 12, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaCreacionTurno = new DateTime(2022, 9, 2, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurnoReservado = new DateTime(2022, 9, 12, 17, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurnoReservadoFinal = new DateTime(2022, 9, 12, 18, 0, 0, 0, DateTimeKind.Unspecified),
                             PeluqueroId = 23
                         });
                 });

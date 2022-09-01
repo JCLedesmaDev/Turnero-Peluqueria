@@ -41,7 +41,6 @@ namespace Turnero.BaseDatos.Data
                     ClienteId=1234,
                     FechaCreacionTurno = new DateTime(2022, 8, 19, 14, 22, 00),
                     FechaTurnoReservado = new DateTime(2022, 10, 22, 18, 30, 00),
-                    FechaTurnoReservadoFinal = new DateTime(2022, 01, 22, 19, 00, 00),
                     PeluqueroId= 11,                    
                 },
                 new Turno
@@ -50,7 +49,6 @@ namespace Turnero.BaseDatos.Data
                     ClienteId = 3456,
                     FechaCreacionTurno = new DateTime(2022, 9, 14, 17, 30, 00),
                     FechaTurnoReservado = new DateTime(2022, 9, 23, 16, 30, 00),
-                    FechaTurnoReservadoFinal = new DateTime(2022, 9, 23, 17, 00, 00),
                     PeluqueroId = 11
                 },
                 new Turno
@@ -59,7 +57,6 @@ namespace Turnero.BaseDatos.Data
                     ClienteId = 2345,
                     FechaCreacionTurno = new DateTime(2022, 9, 02, 17, 30, 00),
                     FechaTurnoReservado = new DateTime(2022, 9, 12, 17, 30, 00),
-                    FechaTurnoReservadoFinal = new DateTime(2022, 9, 12, 18, 00, 00),
                     PeluqueroId = 23
                 }
             );

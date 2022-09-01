@@ -389,22 +389,3 @@ Quedando al final de la siguiente forma:
 a la pag. del swagger donde nos aparecera todos los metodos que contiene el proyecto.
 
 
-
-
----------------------------------------------
-
-
-Nota personal:
-
-En proyecto de NEPS, tienen un proyecto llamado "entities_library" idem al Shared. 
-Cada carpeta es la entidad de algo en relacion pero tb tienen una carpeta llamada
-"Comun", la cual tiene clases pero con valores ya predefinido. 
-
-
-Por ejem.:
-public class CodigosArea {
-   public static long BitacoraEstudainte = 5
-}
-
-Para que cuando necesitan un estado en especifico, escriben:
-entity_library.Comun.CodigoArea.BitacoraEstudiante

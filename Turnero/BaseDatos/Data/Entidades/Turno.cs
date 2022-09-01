@@ -31,15 +31,9 @@ namespace Turnero.BaseDatos.Data.Entidades
     {
         public int PeluqueroId { get; set; }
         public int ClienteId { get; set; }
-        
-        // Momento en el que se reserva el turno
         public DateTime FechaCreacionTurno { get; set; } 
-        
-        // Horario inicial del corte
         public DateTime FechaTurnoReservado { get; set; }
 
-        // Horario final del corte. ( FechaTurnoReservado + 30 min )
-        public DateTime FechaTurnoReservadoFinal { get; set; } 
 
         [ForeignKey("PeluqueroId")]
         public Peluquero Peluquero { get; set; }

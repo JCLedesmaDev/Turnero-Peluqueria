@@ -16,11 +16,10 @@ namespace Turnero.Server.Controllers
             this._context = BDContext;
         }
 
-        [HttpPost("consult")]
-        //public async Task<ActionResult<ResponseDto<string>>> ConsultarTurnoReservado(ConsultaTurnoDto Consulta)
-        public async Task<ActionResult<ResponseDto<List<Turno>>>> ConsultarTurnoReservado(ConsultaTurnoDto Consulta)
+        [HttpPost("consultarTurnoReservado")]
+        public async Task<ActionResult<ResponseDto<string>>> ConsultarTurnoReservado(ConsultaTurnoDto Consulta)
         {
-            ResponseDto<List<Turno>> Response = new ResponseDto<List<Turno>>();
+            ResponseDto<string> Response = new ResponseDto<string>();
 
             try
             {
@@ -41,7 +40,7 @@ namespace Turnero.Server.Controllers
                         ModelState.AddModelError(
                             "Peluquero", "Debe ingresar el Id del peluquero."
                         );
-                    }
+                    }                    
 
                     throw new InvalidDataException(
                         JsonSerializer.Serialize(
@@ -61,27 +60,20 @@ namespace Turnero.Server.Controllers
                 List<Turno> TurnosReservados = await this._context.TablaTurnos
                     .Where(Turno => Turno.PeluqueroId == Consulta.IdPeluquero)
                     .Where(Turno => 
-                        Consulta.FechaHoraCorte >= Turno.FechaTurnoReservado && 
-                        Consulta.FechaHoraCorte <= Turno.FechaTurnoReservadoFinal
+                        Consulta.FechaHoraCorte > Turno.FechaTurnoReservado.AddMinutes(MargenTurno.RestarExtraTiempo) && //Esto no esta en la entrevista...
+                        Consulta.FechaHoraCorte <= Turno.FechaTurnoReservado.AddMinutes(MargenTurno.SumarExtraTiempo)
                      ) // Observar
                     .Include(Turno => Turno.Peluquero)
                     .Include(Turno => Turno.Cliente)
                     .ToListAsync();
 
 
-                //if (TurnosPeluquero.Count == 0)
+                if (TurnosReservados.Count != 0)
                 {
-                    //Response.Data = "La fecha ingresada se encuentra disponible para reservar."
-                //}
+                    throw new Exception("La fecha ingresada no se encuentra disponible para reservar.");
+                }
 
-                /* CONTINUA TODO LO RELACIONADO A LA LOGICA
-                 -> Agregar tiempo extra a la FechaHoraCorte
-                 -> Buscar turnos con la fecha coincicente entre FechaHoraCorte + Extra. ( + validaciones ) 
-                 
-                 */
-
-                // TODO: VER DE QUE NO ME DEVUELVE TODOS LSO DATOS SINO ALGUNOS NULL, VER QUE ESTA RELACIONADO CON EL PROGRAM.CS Linea 55
-                Response.Data = TurnosPeluquero;
+                Response.Data = "La fecha ingresada se encuentra disponible para reservar.¿Desea reservarlo?";
 
             }
             catch (InvalidDataException ex) 

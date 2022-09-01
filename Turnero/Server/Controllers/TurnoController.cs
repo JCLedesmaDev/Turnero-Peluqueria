@@ -91,3 +91,17 @@ namespace Turnero.Server.Controllers
         }
     }
 }
+
+
+
+
+//               | -----------------[  ]---------------- |
+//             17.15                 17:30                 18:00
+
+
+//             Agregar a 17.30, margen de 15 min antes y depues del horario de corte.
+
+//              {
+//                "idPeluquero": 11,
+//                "fechaHoraCorte": "2022-09-23T16:30:00.444Z"
+//              }

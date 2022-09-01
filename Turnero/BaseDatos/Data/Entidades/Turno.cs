@@ -23,18 +23,23 @@ namespace Turnero.BaseDatos.Data.Entidades
     */
 
     [Index(
-        nameof(FechaTurno),
+        nameof(FechaTurnoReservado),
         nameof(PeluqueroId),
         Name = "TurnoFechaPeluquero",
         IsUnique = true)]
     public class Turno : EntityBase
     {
-        public DateTime FechaTurno { get; set; }
         public int PeluqueroId { get; set; }
         public int ClienteId { get; set; }
-        public DateTime FechaCreacion { get; set; }
+        
+        // Momento en el que se reserva el turno
+        public DateTime FechaCreacionTurno { get; set; } 
+        
+        // Horario inicial del corte
+        public DateTime FechaTurnoReservado { get; set; }
 
-        /// TODO: Agregar prop de FechaTurno + 30 min de corte para hacer comparaciones en BD
+        // Horario final del corte. ( FechaTurnoReservado + 30 min )
+        public DateTime FechaTurnoReservadoFinal { get; set; } 
 
         [ForeignKey("PeluqueroId")]
         public Peluquero Peluquero { get; set; }

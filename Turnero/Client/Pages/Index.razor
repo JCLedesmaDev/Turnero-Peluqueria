@@ -10,7 +10,7 @@ Welcome to your new app.
 <SurveyPrompt Title="How is Blazor working for you?" />
 
 
-@*<RadzenTemplateForm Data="@ModelTurno">  
+<RadzenTemplateForm Data="@ModelTurno">  
 
     <div class="row">
 
@@ -26,7 +26,13 @@ Welcome to your new app.
                     </div>
 
                     <div class="col-md-6">
-                        <RadzenDatePicker @bind-Value="ModelTurno.HorarioCorte" DateFormat="d" />
+                        <RadzenCard>
+                            <h4 class="mb-4">12 hour time format</h4>
+                            <RadzenDatePicker TValue="DateTime?"
+                                              ShowTime="true"
+                                              Change=@(args => OnChange(args, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt"))
+                                              HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-100" />
+                        </RadzenCard>
                     </div>
 
                 </div>
@@ -50,19 +56,7 @@ Welcome to your new app.
 
 
 </RadzenTemplateForm>
-*@
 
- <div class="col-lg-6 col-xl-4 p-3">
-     <RadzenCard>
-         <h4 class="mb-4">12 hour time format</h4>
-         <RadzenDatePicker 
-             TValue="DateTime?" 
-             ShowTime="true" 
-             Change=@(args => OnChange(args, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt")) 
-             HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-100" 
-        />
-     </RadzenCard>
- </div>
 
 @code {
 

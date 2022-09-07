@@ -1,3 +1,5 @@
+global using Turnero.Client.Models;
+
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Turnero.Client;

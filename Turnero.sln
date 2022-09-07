@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turnero.Client", "Turnero\C
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turnero.Shared", "Turnero\Shared\Turnero.Shared.csproj", "{E1BDB815-E2D0-4C55-BB5E-10157EA836AF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Turnero.BaseDatos", "Turnero\BaseDatos\Turnero.BaseDatos.csproj", "{B0F98BF8-2FA1-4832-A331-281F5242A607}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Turnero.BaseDatos", "Turnero\BaseDatos\Turnero.BaseDatos.csproj", "{B0F98BF8-2FA1-4832-A331-281F5242A607}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

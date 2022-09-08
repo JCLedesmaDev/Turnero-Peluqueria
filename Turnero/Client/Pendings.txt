@@ -1,0 +1,9 @@
+﻿---> Ordenar los componentes de Index.razor
+
+---> Ver en el TP1 si tengo q agregar campos con los datos del ciente para consultarTurno.
+
+---> Crear carpeta Service
+
+---> Conectar front y back. 
+
+---> Agregar validacion en end-point teniendo en cuenta la hora de apertura y cierre de la pelu 

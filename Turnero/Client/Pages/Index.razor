@@ -16,39 +16,82 @@ Welcome to your new app.
 
         <div class="col-18">
 
-            <RadzenFieldset Text="Detalles">
-
 
                 <div class="row">
-
-                    <div class="col-md-2 align-items-center d-flex">
-                        <RadzenLabel Text="Release Date" />
-                    </div>
 
                     <div class="col-md-6">
                         <RadzenCard>
                             <h4 class="mb-4">12 hour time format</h4>
                             <RadzenDatePicker TValue="DateTime?"
-                                              ShowTime="true"
-                                              Change=@(args => OnChange(args, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt"))
-                                              HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-100" />
+                                ShowTime="true"
+                                Change=@(args => OnChange(args, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt"))
+                                HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-100" 
+                                Min="DateTime.Now" 
+                            />
                         </RadzenCard>
                     </div>
 
                 </div>
 
-                <div class="row">
+                <div class="row my-5">
+                    <div class="col-lg-6 col-xl-4 offset-lg-3 offset-xl-4">
+                        <RadzenCard class="m-3">
+                            <h3 class="h5">Contact</h3>
+                            <div class="d-flex flex-row">
+                                <RadzenImage Path="https://img.blogs.es/anexom/wp-content/uploads/2018/12/42707058715_61bbdc578f_k.jpg" Class="rounded-circle float-left mr-3" Style="width: 100px; height: 100px;" />
+                                <div>
+                                    <div>Employee</div>
+                                    <b>Juan Cruz Ledesma</b>
+                                    <div class="mt-3">Company</div>
+                                    <b>Peluquero</b>
+                                </div>
+                            </div>
+                        </RadzenCard>
+                      @*  <RadzenCard class="m-3">
+                            <h3 class="h5">Delivery Information</h3>
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <div>Country</div>
+                                    <b>Argentina</b>
+                                    <div class="mt-3">City</div>
+                                    <b>Cordoba</b>
+                                </div>
+                                <div class="col-md-8">
+                                    <div>Ship name</div>
+                                    <b>El pelusa</b>
+                                    <div class="mt-3">Freight</div>
+                                    <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", 500)</b>
+                                </div>
+                            </div>
+                        </RadzenCard>*@
+                    </div>
 
-                    <div class="col-md-2 align-items-center d-flex"/>
+                    <div class="col-md-6 col-lg-4 col-xl-3 p-3">
+                        <RadzenCard>
+                            <h4 class="mb-4">Bind Value to model property</h4>
+                            <RadzenDropDown AllowClear="true" AllowFiltering="true" 
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                        Data=@products @bind-Value=@myModel
+                                TextProperty="ProductName" ValueProperty="ProductID" 
+                                Change=@(args => ChangeBound(args, "DropDown with bound Value")) Class="w-100" />
+                        </RadzenCard>
+                    </div>
 
-                    <div class="col-md-6">
-                        <RadzenButton Text="Save" ButtonStyle="ButtonStyle.Primary" Click=@(args => ProbandoMetodo()) />
+
+                    <div class="row">
+
+                        <div class="col-md-2 align-items-center d-flex"/>
+
+                        <div class="col-md-6">
+                            <RadzenButton Text="Save" ButtonStyle="ButtonStyle.Primary" Click=@(args => ProbandoMetodo()) />
+                        </div>
+
                     </div>
 
                 </div>
 
 
-            </RadzenFieldset>
+
 
         </div>
 
@@ -58,29 +101,51 @@ Welcome to your new app.
 </RadzenTemplateForm>
 
 
-@code {
 
+
+
+@code {
     #region VARIABLES
 
-    //private EditContext editFormContext;
-    //private bool isFormInvalid = false;
+    //object myModel = new {
+    //    MyValue = ""
+    //}; 
 
-    public DateTime? VariableValue = DateTime.Now;
-    
+    /* Select */
+
+    string myModel = "";
+    new List<object> products = new List<object>{
+        new {
+            ProductName = "AAAA",
+            ProductID  = "1",
+        },
+        new {
+            ProductName = "BBB",
+            ProductID  = "2",
+        },
+    };
+
+    void ChangeBound(object value, string name)
+    {
+        //Console.WriteLine($"{name} value changed to {myModel.MyValue}");
+        Console.WriteLine($"{name} value changed to {myModel}");
+    }
+    /* Select */
+
+    /* Calendario */
+    public ModeloPrueba ModelTurno { get; set; }
+
     void OnChange(DateTime? value, string name, string format)
     {
         Console.WriteLine($"{name} value changed to {value?.ToString(format)}");
+        Console.Write("AAAAA " + ModelTurno.HorarioCorte);
     }
+    /* Calendario */
 
 
-    public ModeloPrueba ModelTurno { get; set; }
     
 
     #endregion
-
-    //https://blazor.radzen.com/get-started
-
-    //https://blazor.radzen.com/docs/guides/components/datepicker.html
 
     //https://blazor.radzen.com/datepicker
 

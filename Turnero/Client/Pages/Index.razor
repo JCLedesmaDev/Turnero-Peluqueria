@@ -1,16 +1,11 @@
 ﻿@page "/"
+@using Turnero.Client.Models;
 
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
-
-<RadzenTemplateForm Data="@ModelTurno">  
+<RadzenTemplateForm Data="@ModelTurno" >  
 
     <div class="row">
 
@@ -82,9 +77,11 @@ Welcome to your new app.
 
                         <div class="col-md-2 align-items-center d-flex"/>
 
-                        <div class="col-md-6">
-                            <RadzenButton Text="Save" ButtonStyle="ButtonStyle.Primary" Click=@(args => ProbandoMetodo()) />
-                        </div>
+                    <div class="col-md-6">
+                        <RadzenButton Text="Save" 
+                            ButtonStyle="ButtonStyle.Primary"
+                            Click=@(args => OnChange(args, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt")) />
+                    </div>
 
                     </div>
 
@@ -104,33 +101,16 @@ Welcome to your new app.
 
 
 
+
 @code {
     #region VARIABLES
 
-    //object myModel = new {
-    //    MyValue = ""
-    //}; 
+    public ModeloPrueba ModelTurno = new ModeloPrueba
+        {
+            HorarioCorte = DateTime.Now
+        };
 
-    /* Select */
-
-    string myModel = "";
-    new List<object> products = new List<object>{
-        new {
-            ProductName = "AAAA",
-            ProductID  = "1",
-        },
-        new {
-            ProductName = "BBB",
-            ProductID  = "2",
-        },
-    };
-
-    void ChangeBound(object value, string name)
-    {
-        //Console.WriteLine($"{name} value changed to {myModel.MyValue}");
-        Console.WriteLine($"{name} value changed to {myModel}");
-    }
-    /* Select */
+    #endregion
 
     /* Calendario */
     public ModeloPrueba ModelTurno { get; set; }
@@ -150,10 +130,5 @@ Welcome to your new app.
     //https://blazor.radzen.com/datepicker
 
     //https://www.youtube.com/watch?v=IpdqFj8t6z4&t=932s
-
-    public void ProbandoMetodo()
-    {
-        Console.Write("AAAAA " + ModelTurno.HorarioCorte);
-    }
 
 }

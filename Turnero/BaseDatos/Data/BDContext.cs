@@ -16,7 +16,7 @@ namespace Turnero.BaseDatos.Data
                new Peluquero
                {
                    Id = 11,
-                   Nombre = "David",
+                   Nombre = "David AAAAAAAA",
                    Apellido = "Gonzales",
                    DNI = "35.214.872",
                    ImagenPerfil = "",

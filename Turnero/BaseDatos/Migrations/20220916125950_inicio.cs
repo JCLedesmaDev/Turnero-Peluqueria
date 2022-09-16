@@ -85,7 +85,7 @@ namespace Turnero.BaseDatos.Migrations
                 columns: new[] { "Id", "Apellido", "DNI", "ImagenPerfil", "Nombre", "Password" },
                 values: new object[,]
                 {
-                    { 11, "Gonzales", "35.214.872", "", "David", "ASD" },
+                    { 11, "Gonzales", "35.214.872", "", "David AAAAAAAA", "ASD" },
                     { 23, "Del Valle", "25.214.872", "", "Eduardo", "ASD" }
                 });
 

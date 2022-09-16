@@ -12,14 +12,14 @@ using Turnero.BaseDatos.Data;
 namespace Turnero.BaseDatos.Migrations
 {
     [DbContext(typeof(BDContext))]
-    [Migration("20220916125208_inicio")]
+    [Migration("20220916125950_inicio")]
     partial class inicio
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "6.0.8")
+                .HasAnnotation("ProductVersion", "6.0.9")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
@@ -124,7 +124,7 @@ namespace Turnero.BaseDatos.Migrations
                             Apellido = "Gonzales",
                             DNI = "35.214.872",
                             ImagenPerfil = "",
-                            Nombre = "David",
+                            Nombre = "David AAAAAAAA",
                             Password = "ASD"
                         },
                         new

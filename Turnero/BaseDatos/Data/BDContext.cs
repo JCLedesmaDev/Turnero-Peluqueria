@@ -5,9 +5,8 @@ namespace Turnero.BaseDatos.Data
 {
     public class BDContext : DbContext
     {
-        public BDContext(
-            DbContextOptions<BDContext> options
-        ) : base(options)
+
+        public BDContext(DbContextOptions<BDContext> options) : base(options)
         {
         }
 

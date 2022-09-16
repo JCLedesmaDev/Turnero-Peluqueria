@@ -4,7 +4,7 @@
 
 <PageTitle>Index</PageTitle>
 
-
+@*
 <RadzenTemplateForm Data="@ModelTurno" >  
 
     <div class="row">
@@ -42,7 +42,8 @@
                                 </div>
                             </div>
                         </RadzenCard>
-                      @*  <RadzenCard class="m-3">
+
+                       <RadzenCard class="m-3">
                             <h3 class="h5">Delivery Information</h3>
                             <div class="row">
                                 <div class="col-md-4">
@@ -58,7 +59,7 @@
                                     <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", 500)</b>
                                 </div>
                             </div>
-                        </RadzenCard>*@
+                        </RadzenCard>
                     </div>
 
                     <div class="col-md-6 col-lg-4 col-xl-3 p-3">
@@ -95,7 +96,7 @@
     </div>
 
 
-</RadzenTemplateForm>
+</RadzenTemplateForm> *@
 
 
 
@@ -113,7 +114,6 @@
     #endregion
 
     /* Calendario */
-    public ModeloPrueba ModelTurno { get; set; }
 
     void OnChange(DateTime? value, string name, string format)
     {
@@ -125,7 +125,6 @@
 
     
 
-    #endregion
 
     //https://blazor.radzen.com/datepicker
 

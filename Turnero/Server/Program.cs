@@ -38,15 +38,15 @@ builder.Services.AddSwaggerGen(config =>
     });
 });
 
-#endregion Juan: Conexion a Base Datos y Config de Swagger
+#endregion Conexion a Base Datos y Config de Swagger
 
 
 #region Desactivamos la validacion automatica del modelState
 
-builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
-{
-    options.SuppressModelStateInvalidFilter = true;
-});
+//builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
+//{
+//    options.SuppressModelStateInvalidFilter = true;
+//});
 
 #endregion
 

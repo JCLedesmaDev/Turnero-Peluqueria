@@ -43,10 +43,10 @@ builder.Services.AddSwaggerGen(config =>
 
 #region Desactivamos la validacion automatica del modelState
 
-//builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
-//{
-//    options.SuppressModelStateInvalidFilter = true;
-//});
+builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options =>
+{
+    options.SuppressModelStateInvalidFilter = true;
+});
 
 #endregion
 

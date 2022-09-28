@@ -26,35 +26,22 @@ namespace Turnero.Server.Controllers
                 bool FechaValidate = Consulta?.FechaHoraCorte == null || Consulta.FechaHoraCorte <= DateTime.Now;
                 bool IdPeluqueroValidate = Consulta?.IdPeluquero == null || Consulta?.IdPeluquero == 0;
 
-                if (!TryValidateModel(Consulta) || FechaValidate || IdPeluqueroValidate)
+                if (IdPeluqueroValidate)
                 {
-                    if (FechaValidate)
-                    {
-                        ModelState.AddModelError(
-                            "Fecha Hora Corte", "La fecha debe ser mayor o igual a la fecha actual"
-                        );
-                    }
-
-                    if (IdPeluqueroValidate)
-                    {
-                        ModelState.AddModelError(
-                            "Peluquero", "Debe ingresar el Id del peluquero."
-                        );
-                    }                    
-
-                    throw new InvalidDataException(
-                        JsonSerializer.Serialize(
-                             ErrorHelper.GetModelStateErrors(ModelState)
-                        ).ToString()
-                    );
+                    throw new Exception("Debe ingresar el Id del peluquero.");
+                }                    
+        
+                if (FechaValidate)
+                {
+                    throw new Exception("La fecha debe ser mayor o igual a la fecha actual");
                 }
 
-                Peluquero peluquero = await this._context.TablaPeluqueros
+                Peluquero? peluquero = await this._context.TablaPeluqueros
                     .FirstOrDefaultAsync( Peluquero => Peluquero.Id == Consulta.IdPeluquero);
 
                 if (peluquero == null)
                 {
-                    throw new Exception("No se ha encotrado a este peluquero.");
+                    throw new Exception("No se ha encontrado a este peluquero.");
                 }
 
                 List<Turno> TurnosReservados = await this._context.TablaTurnos
@@ -73,13 +60,9 @@ namespace Turnero.Server.Controllers
                     throw new Exception("La fecha ingresada no se encuentra disponible para reservar.");
                 }
 
-                Response.Data = "La fecha ingresada se encuentra disponible para reservar.¿Desea reservarlo?";
+                Response.Result = "La fecha ingresada se encuentra disponible para reservar.¿Desea reservarlo?";
 
-            }
-            catch (InvalidDataException ex) 
-            {
-                Response.ErrorModels = JsonSerializer.Deserialize <List<ModelErrors>>(ex.Message);
-                return BadRequest(Response);
+                return Ok(Response);
             }
             catch (Exception ex)
             {
@@ -87,7 +70,6 @@ namespace Turnero.Server.Controllers
                 return BadRequest(Response);
             }
             
-            return Ok(Response);
         }
     }
 }

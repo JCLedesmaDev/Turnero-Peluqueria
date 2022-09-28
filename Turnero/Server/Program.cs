@@ -4,7 +4,6 @@
 global using Microsoft.EntityFrameworkCore;
 global using Turnero.BaseDatos.Data;
 global using Turnero.BaseDatos.Data.Entidades;
-global using Turnero.Helper;
 global using Turnero.Shared.Comun;
 global using Turnero.Shared.DTO_Back;
 global using Turnero.Shared.DTO_Front;

@@ -1,6 +1,9 @@
 ﻿@page "/"
 @using Turnero.Client.Models;
 @using Radzen;
+@using Turnero.Shared.DTO_Back.Peluquero;
+
+@inject PeluqueroService PeluqueroService;
 
 <PageTitle>Index</PageTitle>
 
@@ -43,20 +46,20 @@
                      <RadzenDataGrid AllowFiltering="false"
                                                 FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                                                 AllowPaging="true" PageSize="3"
-                                                AllowSorting="true" Data="@employees" TItem="Peluquero" ColumnWidth="50px"
+                                                AllowSorting="true" Data="@employees" TItem="PeluqueroData" ColumnWidth="50px"
                                                 SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedEmployees
                                 >
                                     <Columns>
-                                        <RadzenDataGridColumn TItem="Peluquero" Property="Photo" Title="Peluquero" Sortable="false" Filterable="false">
+                                        <RadzenDataGridColumn TItem="PeluqueroData" Property="Photo" Title="PeluqueroData" Sortable="false" Filterable="false">
                                             <Template Context="data">
                                                 @*<RadzenImage Path="@data.Photo" *@
                                                 <RadzenImage Path="https://img.blogs.es/anexom/wp-content/uploads/2018/12/42707058715_61bbdc578f_k.jpg"
                                                              style="width: 50px; height: 50px; border-radius: 8px; margin-right: 8px;" />
-                                                @data.FirstName @data.LastName
+                                                @data.Nombre @data.Apellido
                                             </Template>
                                         </RadzenDataGridColumn>
 
-                                        <RadzenDataGridColumn TItem="Peluquero" Property="Title" Title="Title" />
+                                        <RadzenDataGridColumn TItem="PeluqueroData" Property="Title" Title="Title" />
 
                                     </Columns>
                                 </RadzenDataGrid>
@@ -101,10 +104,6 @@
 </RadzenTemplateForm>
 
 
-
-
-
-
 @code {
     #region VARIABLES
 
@@ -115,34 +114,28 @@
     };
 
 
-    /// SELECT
-    //public class ModeloSelect
-    //{
-    //    public string CustomerID { get; set; }
-    //    public string CompanyName { get; set; }
-    //}
-
-    //public List<ModeloSelect> DatosSelect = new List<ModeloSelect>
-    //{
-    //    new ModeloSelect
-    //    {
-    //        CustomerID = "12",
-    //        CompanyName = "LALALAA",
-    //    },
-    //    new ModeloSelect
-    //    {
-    //        CustomerID = "1",
-    //        CompanyName = "Eduardo",
-    //    },
-    //    new ModeloSelect
-    //    {
-    //        CustomerID = "3",
-    //        CompanyName = "Adolfo",
-    //    },
-    //};
-    //string value = "ALFKI";
-
     #endregion
+
+    protected override async void OnInitialized()
+    {
+
+        await GetAllPeluqueros();
+
+        employees = new List<PeluqueroData>
+        {
+            new PeluqueroData
+            {
+                ImagenPerfil= "",
+                Nombre= "",
+                Apellido= "",
+                DNI = "",
+            }
+
+        };
+        selectedEmployees = employees.Take(1).ToList();
+    }
+
+
 
     /* Calendario */
 
@@ -156,153 +149,27 @@
 
 
 
-    /* SELECT PELUQUERO */
-
-    //private void OnChangeSelect(object value, string name)
-    //{
-    //    var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
-
-    //    Console.Write($"{name} value changed to {str}");
-    //}
-
-    /* SELECT PELUQUERO */
 
 
 
 
-    //https://blazor.radzen.com/datepicker
-
-    //https://www.youtube.com/watch?v=IpdqFj8t6z4&t=932s
-
-    public class Peluquero
-    {
-        public string Photo { get; set; }
-        public string FirstName { get; set; }
-        public string LastName { get; set; }
-        public string Title { get; set; }
-        public string EmployeeID { get; set; }
-        public string HireDate { get; set; }
-        public string City { get; set; }
-        public string Country { get; set; }
-    }
+    public List<PeluqueroData> employees;
+    public IList<PeluqueroData> selectedEmployees;
 
 
-    public List<Peluquero> employees;
-    public IList<Peluquero> selectedEmployees;
-
-    protected override void OnInitialized()
-    {
-        base.OnInitialized();
-
-        employees = new List<Peluquero>
-        {
-            new Peluquero
-            {
-                Photo = "",
-                FirstName = "AAAAA",
-                LastName = "AAAAA",
-                Title = "5ASDQ44",
-                EmployeeID = "65445",
-                HireDate = "asdasd",
-                City = "asdasd",
-                Country = "asdasd",
-            },
-            new Peluquero
-            {
-                FirstName = "BBBBB",
-                LastName = "BBBBB",
-                Title = "asdasd",
-                EmployeeID = "5678",
-                HireDate = "asdasd",
-                City = "asdasd",
-                Country = "asdasd",
-                Photo = "",
-            },
-            new Peluquero
-            {
-                FirstName = "CCCC",
-                LastName = "CCCC",
-                Title = "asdasd",
-                EmployeeID = "087",
-                HireDate = "asdasd",
-                City = "asdasd",
-                Country = "asdasd",
-                Photo = "",
-            },
-                        new Peluquero
-            {
-                Photo = "",
-                FirstName = "AAAAA",
-                LastName = "AAAAA",
-                Title = "asdasd",
-                EmployeeID = "88",
-                HireDate = "asdasd",
-                City = "asdasd",
-                Country = "asdasd",
-            },
-            new Peluquero
-            {
-                FirstName = "BBBBB",
-                LastName = "BBBBB",
-                Title = "asdasd",
-                EmployeeID = "6",
-                HireDate = "asdasd",
-                City = "asdasd",
-                Country = "asdasd",
-                Photo = "",
-            },
-            new Peluquero
-            {
-                FirstName = "CCCC",
-                LastName = "CCCC",
-                Title = "asdasd",
-                EmployeeID = "543",
-                HireDate = "asdasd",
-                City = "asdasd",
-                Country = "asdasd",
-                Photo = "",
-            },
-                        new Peluquero
-            {
-                Photo = "",
-                FirstName = "AAAAA",
-                LastName = "AAAAA",
-                Title = "asdasd",
-                EmployeeID = "123",
-                HireDate = "asdasd",
-                City = "asdasd",
-                Country = "asdasd",
-            },
-            new Peluquero
-            {
-                FirstName = "BBBBB",
-                LastName = "BBBBB",
-                Title = "asdasd",
-                EmployeeID = "23",
-                HireDate = "asdasd",
-                City = "asdasd",
-                Country = "asdasd",
-                Photo = "",
-            },
-            new Peluquero
-            {
-                FirstName = "CCCC",
-                LastName = "CCCC",
-                Title = "asdasd",
-                EmployeeID = "3",
-                HireDate = "asdasd",
-                City = "asdasd",
-                Country = "asdasd",
-                Photo = "",
-            },
-        };
-        selectedEmployees = employees.Take(1).ToList();
-    }
 
     private void ClearSelection()
     {
         selectedEmployees = null;
     }
+
+    private async Task GetAllPeluqueros() {
+
+        await this.PeluqueroService.GetAll();
+
+
+    }
+
 
 
 }

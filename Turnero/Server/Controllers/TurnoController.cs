@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Text.Json;
+using Turnero.Shared.DTO_Back;
 
 namespace Turnero.Server.Controllers
 {
@@ -19,7 +20,7 @@ namespace Turnero.Server.Controllers
         [HttpPost("consultarTurnoReservado")]
         public async Task<ActionResult<ResponseDto<string>>> ConsultarTurnoReservado(ConsultaTurnoDto Consulta)
         {
-            ResponseDto<string> Response = new ResponseDto<string>();
+            ResponseDto<string> ResponseDto = new ResponseDto<string>();
 
             try
             {
@@ -60,13 +61,13 @@ namespace Turnero.Server.Controllers
                     throw new Exception("La fecha ingresada no se encuentra disponible para reservar.");
                 }
 
-                Response.Result = "La fecha ingresada se encuentra disponible para reservar.¿Desea reservarlo?";
+                ResponseDto.Result = "La fecha ingresada se encuentra disponible para reservar.¿Desea reservarlo?";
 
                 return Ok(Response);
             }
             catch (Exception ex)
             {
-                Response.MessageError = ex.Message;
+                ResponseDto.MessageError = $"Ha ocurrido un error, {ex.Message}";
                 return BadRequest(Response);
             }
             

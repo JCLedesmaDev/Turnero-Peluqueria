@@ -5,9 +5,8 @@ namespace Turnero.BaseDatos.Data
 {
     public class BDContext : DbContext
     {
-        public BDContext(
-            DbContextOptions<BDContext> options
-        ) : base(options)
+
+        public BDContext(DbContextOptions<BDContext> options) : base(options)
         {
         }
 
@@ -17,7 +16,7 @@ namespace Turnero.BaseDatos.Data
                new Peluquero
                {
                    Id = 11,
-                   Nombre = "David",
+                   Nombre = "David AAAAAAAA",
                    Apellido = "Gonzales",
                    DNI = "35.214.872",
                    ImagenPerfil = "",

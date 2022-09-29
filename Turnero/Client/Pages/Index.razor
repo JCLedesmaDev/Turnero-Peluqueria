@@ -1,16 +1,11 @@
 ﻿@page "/"
-
+@using Turnero.Client.Models;
+@using Radzen
 
 <PageTitle>Index</PageTitle>
 
-<h1>Hello, world!</h1>
 
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
-
-
-<RadzenTemplateForm Data="@ModelTurno">  
+<RadzenTemplateForm Data="@ModelTurno">
 
     <div class="row">
 
@@ -21,20 +16,38 @@ Welcome to your new app.
 
                     <div class="col-md-6">
                         <RadzenCard>
-                            <h4 class="mb-4">12 hour time format</h4>
+                            <h4 class="mb-4">Elija fecha y hora del corte.</h4>
                             <RadzenDatePicker TValue="DateTime?"
                                 ShowTime="true"
                                 Change=@(args => OnChange(args, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt"))
-                                HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-100" 
+                                HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-50" 
                                 Min="DateTime.Now" 
                             />
                         </RadzenCard>
                     </div>
 
+                    @* <div class="col-md-6 p-3">
+                        <RadzenCard>
+                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Custom filter operator</RadzenText>
+                            <RadzenListBox 
+                                AllowFiltering="true" 
+                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
+                                FilterOperator="StringFilterOperator.StartsWith" 
+                                @bind-Value=@value
+                                Data=@DatosSelect TextProperty="CompanyName" 
+                                ValueProperty="CustomerID" 
+                                Change=@(args => OnChangeSelect(args, "ListBox with custom filter operator")) 
+                                Style="height:200px;" Class="w-50" 
+                                
+                            />
+                        </RadzenCard>
+                   </div>*@
+
                 </div>
 
                 <div class="row my-5">
                     <div class="col-lg-6 col-xl-4 offset-lg-3 offset-xl-4">
+
                         <RadzenCard class="m-3">
                             <h3 class="h5">Contact</h3>
                             <div class="d-flex flex-row">
@@ -47,7 +60,8 @@ Welcome to your new app.
                                 </div>
                             </div>
                         </RadzenCard>
-                      @*  <RadzenCard class="m-3">
+
+                        <RadzenCard class="m-3">
                             <h3 class="h5">Delivery Information</h3>
                             <div class="row">
                                 <div class="col-md-4">
@@ -63,18 +77,8 @@ Welcome to your new app.
                                     <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", 500)</b>
                                 </div>
                             </div>
-                        </RadzenCard>*@
-                    </div>
-
-                    <div class="col-md-6 col-lg-4 col-xl-3 p-3">
-                        <RadzenCard>
-                            <h4 class="mb-4">Bind Value to model property</h4>
-                            <RadzenDropDown AllowClear="true" AllowFiltering="true" 
-                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                        Data=@products @bind-Value=@myModel
-                                TextProperty="ProductName" ValueProperty="ProductID" 
-                                Change=@(args => ChangeBound(args, "DropDown with bound Value")) Class="w-100" />
                         </RadzenCard>
+
                     </div>
 
 
@@ -83,7 +87,10 @@ Welcome to your new app.
                         <div class="col-md-2 align-items-center d-flex"/>
 
                         <div class="col-md-6">
-                            <RadzenButton Text="Save" ButtonStyle="ButtonStyle.Primary" Click=@(args => ProbandoMetodo()) />
+                            <RadzenButton Text="Save" 
+                                ButtonStyle="ButtonStyle.Primary"
+                                Click=@(() => OnChange(DateTime.Now, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt")) 
+                            />
                         </div>
 
                     </div>
@@ -91,7 +98,47 @@ Welcome to your new app.
                 </div>
 
 
+                
+                <RadzenText TextStyle="TextStyle.H3" TagName="TagName.H1" Class="my-4">
+                    DataGrid <strong>Single Selection</strong>
+                </RadzenText>
 
+                    <div style="display: flex; align-items: center; margin-bottom: 16px">
+
+                        <RadzenButton Click="@ClearSelection" Text="Clear Selection" />
+
+                        @if (selectedEmployees?.Any() == true)
+                        {
+                            <div style="margin-left: 16px">
+                                Selected Employee: @selectedEmployees[0].FirstName @selectedEmployees[0].LastName
+                            </div>
+                        }
+                    </div>
+
+                    <RadzenDataGrid 
+                        AllowFiltering="true" 
+                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
+                        AllowPaging="true" PageSize="4"
+                            AllowSorting="true" Data="@employees" TItem="Peluquero" ColumnWidth="200px"
+                            SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedEmployees>
+
+                        <Columns>
+                            <RadzenDataGridColumn TItem="Peluquero" Property="Photo" Title="Peluquero" Sortable="false" Filterable="false">
+                                <Template Context="data">
+                                    <RadzenImage Path="@data.Photo" 
+                                        style="width: 40px; height: 40px; border-radius: 8px; margin-right: 8px;" 
+                                     />
+                                    @data.FirstName @data.LastName
+                                </Template>
+                            </RadzenDataGridColumn>
+
+                            <RadzenDataGridColumn TItem="Peluquero" Property="Title" Title="Title" />
+                            <RadzenDataGridColumn TItem="Peluquero" Property="EmployeeID" Title="Employee ID" />
+                            <RadzenDataGridColumn TItem="Peluquero" Property="HireDate" Title="Hire Date" FormatString="{0:d}" />
+                            <RadzenDataGridColumn TItem="Peluquero" Property="City" Title="City" />
+                            <RadzenDataGridColumn TItem="Peluquero" Property="Country" Title="Country" />
+                        </Columns>
+                    </RadzenDataGrid>
 
         </div>
 
@@ -104,56 +151,139 @@ Welcome to your new app.
 
 
 
+
 @code {
     #region VARIABLES
 
-    //object myModel = new {
-    //    MyValue = ""
-    //}; 
-
-    /* Select */
-
-    string myModel = "";
-    new List<object> products = new List<object>{
-        new {
-            ProductName = "AAAA",
-            ProductID  = "1",
-        },
-        new {
-            ProductName = "BBB",
-            ProductID  = "2",
-        },
+    ///  CALENDARIO
+    public ModeloPrueba ModelTurno = new ModeloPrueba
+    {
+        HorarioCorte = DateTime.Now
     };
 
-    void ChangeBound(object value, string name)
-    {
-        //Console.WriteLine($"{name} value changed to {myModel.MyValue}");
-        Console.WriteLine($"{name} value changed to {myModel}");
-    }
-    /* Select */
+
+    /// SELECT
+    //public class ModeloSelect
+    //{
+    //    public string CustomerID { get; set; }
+    //    public string CompanyName { get; set; }
+    //}
+
+    //public List<ModeloSelect> DatosSelect = new List<ModeloSelect>
+    //{
+    //    new ModeloSelect
+    //    {
+    //        CustomerID = "12",
+    //        CompanyName = "LALALAA",
+    //    },
+    //    new ModeloSelect
+    //    {
+    //        CustomerID = "1",
+    //        CompanyName = "Eduardo",
+    //    },
+    //    new ModeloSelect
+    //    {
+    //        CustomerID = "3",
+    //        CompanyName = "Adolfo",
+    //    },
+    //};
+    //string value = "ALFKI";
+
+    #endregion
 
     /* Calendario */
-    public ModeloPrueba ModelTurno { get; set; }
 
-    void OnChange(DateTime? value, string name, string format)
+    private void OnChange(DateTime? value, string name, string format)
     {
         Console.WriteLine($"{name} value changed to {value?.ToString(format)}");
         Console.Write("AAAAA " + ModelTurno.HorarioCorte);
     }
+
     /* Calendario */
 
 
-    
 
-    #endregion
+    /* SELECT PELUQUERO */
+
+    //private void OnChangeSelect(object value, string name)
+    //{
+    //    var str = value is IEnumerable<object> ? string.Join(", ", (IEnumerable<object>)value) : value;
+
+    //    Console.Write($"{name} value changed to {str}");
+    //}
+
+    /* SELECT PELUQUERO */
+
+
+
 
     //https://blazor.radzen.com/datepicker
 
     //https://www.youtube.com/watch?v=IpdqFj8t6z4&t=932s
 
-    public void ProbandoMetodo()
+    public class Peluquero
     {
-        Console.Write("AAAAA " + ModelTurno.HorarioCorte);
+        public string Photo { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string Title { get; set; }
+        public string EmployeeID { get; set; }
+        public string HireDate { get; set; }
+        public string City { get; set; }
+        public string Country { get; set; }
     }
+
+
+    public List<Peluquero> employees;
+    public IList<Peluquero> selectedEmployees;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+
+        employees = new List<Peluquero>
+        {
+            new Peluquero
+            {
+                Photo = "",
+                FirstName = "asdasd",
+                LastName = "asdasd",
+                Title = "asdasd",
+                EmployeeID = "asdasd",
+                HireDate = "asdasd",
+                City = "asdasd",
+                Country = "asdasd",
+            },
+            new Peluquero
+            {
+                FirstName = "asdasd",
+                LastName = "asdasd",
+                Title = "asdasd",
+                EmployeeID = "asdasd",
+                HireDate = "asdasd",
+                City = "asdasd",
+                Country = "asdasd",
+                Photo = "",
+            },
+            new Peluquero
+            {
+                FirstName = "asdasd",
+                LastName = "asdasd",
+                Title = "asdasd",
+                EmployeeID = "asdasd",
+                HireDate = "asdasd",
+                City = "asdasd",
+                Country = "asdasd",
+                Photo = "",
+            },
+        };
+        selectedEmployees = employees.Take(1).ToList();
+    }
+
+    private void ClearSelection()
+    {
+        selectedEmployees = null;
+    }
+
 
 }

@@ -1,150 +1,103 @@
 ﻿@page "/"
 @using Turnero.Client.Models;
-@using Radzen
+@using Radzen;
 
 <PageTitle>Index</PageTitle>
 
 
 <RadzenTemplateForm Data="@ModelTurno">
 
-    <div class="row">
+    <div class="row d-flex justify-content-center align-items-center  widthPerson">
 
-        <div class="col-18">
+        <div class="col-md-6">
+             <RadzenCard>
 
+                 <div>
 
-                <div class="row">
+                     <h4 class="mb-4">Elija fecha y hora del corte.</h4>
+                     <RadzenDatePicker TValue="DateTime?"
+                         ShowTime="true"
+                         Change=@(args => OnChange(args, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt"))
+                         HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-50" 
+                         Min="DateTime.Now" 
+                     />
 
-                    <div class="col-md-6">
-                        <RadzenCard>
-                            <h4 class="mb-4">Elija fecha y hora del corte.</h4>
-                            <RadzenDatePicker TValue="DateTime?"
-                                ShowTime="true"
-                                Change=@(args => OnChange(args, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt"))
-                                HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-50" 
-                                Min="DateTime.Now" 
-                            />
-                        </RadzenCard>
-                    </div>
+                 </div>
 
-                    @* <div class="col-md-6 p-3">
-                        <RadzenCard>
-                            <RadzenText TextStyle="TextStyle.Subtitle2" TagName="TagName.H3">Custom filter operator</RadzenText>
-                            <RadzenListBox 
-                                AllowFiltering="true" 
-                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
-                                FilterOperator="StringFilterOperator.StartsWith" 
-                                @bind-Value=@value
-                                Data=@DatosSelect TextProperty="CompanyName" 
-                                ValueProperty="CustomerID" 
-                                Change=@(args => OnChangeSelect(args, "ListBox with custom filter operator")) 
-                                Style="height:200px;" Class="w-50" 
-                                
-                            />
-                        </RadzenCard>
-                   </div>*@
+                 <br/>
 
-                </div>
+                 <div>
 
-                <div class="row my-5">
-                    <div class="col-lg-6 col-xl-4 offset-lg-3 offset-xl-4">
+                     <div style="display: flex; align-items: center; margin-bottom: 16px">
 
-                        <RadzenCard class="m-3">
-                            <h3 class="h5">Contact</h3>
-                            <div class="d-flex flex-row">
-                                <RadzenImage Path="https://img.blogs.es/anexom/wp-content/uploads/2018/12/42707058715_61bbdc578f_k.jpg" Class="rounded-circle float-left mr-3" Style="width: 100px; height: 100px;" />
-                                <div>
-                                    <div>Employee</div>
-                                    <b>Juan Cruz Ledesma</b>
-                                    <div class="mt-3">Company</div>
-                                    <b>Peluquero</b>
-                                </div>
-                            </div>
-                        </RadzenCard>
+                         <RadzenButton Click="@ClearSelection" Text="Clear Selection" />
+@*
+                         @if (selectedEmployees?.Any() == true)
+                         {
+                             <div style="margin-left: 16px">
+                                 Selected Employee: @selectedEmployees[0].FirstName @selectedEmployees[0].LastName
+                             </div>
+                         }*@
+                     </div>
 
-                        <RadzenCard class="m-3">
-                            <h3 class="h5">Delivery Information</h3>
-                            <div class="row">
-                                <div class="col-md-4">
-                                    <div>Country</div>
-                                    <b>Argentina</b>
-                                    <div class="mt-3">City</div>
-                                    <b>Cordoba</b>
-                                </div>
-                                <div class="col-md-8">
-                                    <div>Ship name</div>
-                                    <b>El pelusa</b>
-                                    <div class="mt-3">Freight</div>
-                                    <b>@String.Format(new System.Globalization.CultureInfo("en-US"), "{0:C}", 500)</b>
-                                </div>
-                            </div>
-                        </RadzenCard>
+                     <RadzenDataGrid AllowFiltering="false"
+                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                                                AllowPaging="true" PageSize="3"
+                                                AllowSorting="true" Data="@employees" TItem="Peluquero" ColumnWidth="50px"
+                                                SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedEmployees
+                                >
+                                    <Columns>
+                                        <RadzenDataGridColumn TItem="Peluquero" Property="Photo" Title="Peluquero" Sortable="false" Filterable="false">
+                                            <Template Context="data">
+                                                @*<RadzenImage Path="@data.Photo" *@
+                                                <RadzenImage Path="https://img.blogs.es/anexom/wp-content/uploads/2018/12/42707058715_61bbdc578f_k.jpg"
+                                                             style="width: 50px; height: 50px; border-radius: 8px; margin-right: 8px;" />
+                                                @data.FirstName @data.LastName
+                                            </Template>
+                                        </RadzenDataGridColumn>
 
-                    </div>
+                                        <RadzenDataGridColumn TItem="Peluquero" Property="Title" Title="Title" />
 
+                                    </Columns>
+                                </RadzenDataGrid>
 
-                    <div class="row">
+                     <div class="row ">
+                        <div class="col-md-6 m-auto">
 
-                        <div class="col-md-2 align-items-center d-flex"/>
+                             <RadzenCard class="m-1">
+                                 <h3 class="h5">Peluquero seleccionado</h3>
+                                 <div class="d-flex flex-row">
+                                     <RadzenImage Path="https://img.blogs.es/anexom/wp-content/uploads/2018/12/42707058715_61bbdc578f_k.jpg" Class="rounded-circle float-left mr-3" Style="width: 100px; height: 100px;" />
+                                     <div>
+                                         <div>Employee</div>
+                                         <b>Juan Cruz Ledesma</b>
+                                         <div class="mt-3">Company</div>
+                                         <b>Peluquero</b>
+                                     </div>
+                                 </div>
+                             </RadzenCard>
 
-                        <div class="col-md-6">
-                            <RadzenButton Text="Save" 
-                                ButtonStyle="ButtonStyle.Primary"
-                                Click=@(() => OnChange(DateTime.Now, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt")) 
-                            />
                         </div>
+                     </div>
+                 </div>
 
-                    </div>
+                <div class="row d-flex my-3">
+
+                    <RadzenButton Text="Realizar consulta"
+                        class="justify-content-center"
+                        ButtonStyle="ButtonStyle.Primary"
+                       Click=@(() => OnChange(DateTime.Now, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt"))
+                    />
 
                 </div>
 
-
-                
-                <RadzenText TextStyle="TextStyle.H3" TagName="TagName.H1" Class="my-4">
-                    DataGrid <strong>Single Selection</strong>
-                </RadzenText>
-
-                    <div style="display: flex; align-items: center; margin-bottom: 16px">
-
-                        <RadzenButton Click="@ClearSelection" Text="Clear Selection" />
-
-                        @if (selectedEmployees?.Any() == true)
-                        {
-                            <div style="margin-left: 16px">
-                                Selected Employee: @selectedEmployees[0].FirstName @selectedEmployees[0].LastName
-                            </div>
-                        }
-                    </div>
-
-                    <RadzenDataGrid 
-                        AllowFiltering="true" 
-                        FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive" 
-                        AllowPaging="true" PageSize="4"
-                            AllowSorting="true" Data="@employees" TItem="Peluquero" ColumnWidth="200px"
-                            SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedEmployees>
-
-                        <Columns>
-                            <RadzenDataGridColumn TItem="Peluquero" Property="Photo" Title="Peluquero" Sortable="false" Filterable="false">
-                                <Template Context="data">
-                                    <RadzenImage Path="@data.Photo" 
-                                        style="width: 40px; height: 40px; border-radius: 8px; margin-right: 8px;" 
-                                     />
-                                    @data.FirstName @data.LastName
-                                </Template>
-                            </RadzenDataGridColumn>
-
-                            <RadzenDataGridColumn TItem="Peluquero" Property="Title" Title="Title" />
-                            <RadzenDataGridColumn TItem="Peluquero" Property="EmployeeID" Title="Employee ID" />
-                            <RadzenDataGridColumn TItem="Peluquero" Property="HireDate" Title="Hire Date" FormatString="{0:d}" />
-                            <RadzenDataGridColumn TItem="Peluquero" Property="City" Title="City" />
-                            <RadzenDataGridColumn TItem="Peluquero" Property="Country" Title="Country" />
-                        </Columns>
-                    </RadzenDataGrid>
-
+             </RadzenCard>
         </div>
 
+
+
     </div>
-
-
+                  
 </RadzenTemplateForm>
 
 
@@ -246,20 +199,20 @@
             new Peluquero
             {
                 Photo = "",
-                FirstName = "asdasd",
-                LastName = "asdasd",
-                Title = "asdasd",
-                EmployeeID = "asdasd",
+                FirstName = "AAAAA",
+                LastName = "AAAAA",
+                Title = "5ASDQ44",
+                EmployeeID = "65445",
                 HireDate = "asdasd",
                 City = "asdasd",
                 Country = "asdasd",
             },
             new Peluquero
             {
-                FirstName = "asdasd",
-                LastName = "asdasd",
+                FirstName = "BBBBB",
+                LastName = "BBBBB",
                 Title = "asdasd",
-                EmployeeID = "asdasd",
+                EmployeeID = "5678",
                 HireDate = "asdasd",
                 City = "asdasd",
                 Country = "asdasd",
@@ -267,10 +220,76 @@
             },
             new Peluquero
             {
-                FirstName = "asdasd",
-                LastName = "asdasd",
+                FirstName = "CCCC",
+                LastName = "CCCC",
                 Title = "asdasd",
-                EmployeeID = "asdasd",
+                EmployeeID = "087",
+                HireDate = "asdasd",
+                City = "asdasd",
+                Country = "asdasd",
+                Photo = "",
+            },
+                        new Peluquero
+            {
+                Photo = "",
+                FirstName = "AAAAA",
+                LastName = "AAAAA",
+                Title = "asdasd",
+                EmployeeID = "88",
+                HireDate = "asdasd",
+                City = "asdasd",
+                Country = "asdasd",
+            },
+            new Peluquero
+            {
+                FirstName = "BBBBB",
+                LastName = "BBBBB",
+                Title = "asdasd",
+                EmployeeID = "6",
+                HireDate = "asdasd",
+                City = "asdasd",
+                Country = "asdasd",
+                Photo = "",
+            },
+            new Peluquero
+            {
+                FirstName = "CCCC",
+                LastName = "CCCC",
+                Title = "asdasd",
+                EmployeeID = "543",
+                HireDate = "asdasd",
+                City = "asdasd",
+                Country = "asdasd",
+                Photo = "",
+            },
+                        new Peluquero
+            {
+                Photo = "",
+                FirstName = "AAAAA",
+                LastName = "AAAAA",
+                Title = "asdasd",
+                EmployeeID = "123",
+                HireDate = "asdasd",
+                City = "asdasd",
+                Country = "asdasd",
+            },
+            new Peluquero
+            {
+                FirstName = "BBBBB",
+                LastName = "BBBBB",
+                Title = "asdasd",
+                EmployeeID = "23",
+                HireDate = "asdasd",
+                City = "asdasd",
+                Country = "asdasd",
+                Photo = "",
+            },
+            new Peluquero
+            {
+                FirstName = "CCCC",
+                LastName = "CCCC",
+                Title = "asdasd",
+                EmployeeID = "3",
                 HireDate = "asdasd",
                 City = "asdasd",
                 Country = "asdasd",

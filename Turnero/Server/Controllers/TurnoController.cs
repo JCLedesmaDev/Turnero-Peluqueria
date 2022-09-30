@@ -63,12 +63,12 @@ namespace Turnero.Server.Controllers
 
                 ResponseDto.Result = "La fecha ingresada se encuentra disponible para reservar.¿Desea reservarlo?";
 
-                return Ok(Response);
+                return Ok(ResponseDto);
             }
             catch (Exception ex)
             {
                 ResponseDto.MessageError = $"Ha ocurrido un error, {ex.Message}";
-                return BadRequest(Response);
+                return BadRequest(ResponseDto);
             }
             
         }

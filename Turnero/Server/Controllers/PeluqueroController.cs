@@ -34,6 +34,7 @@ namespace Turnero.Server.Controllers
                 {
                     ListaPeluquerosMapper.Add(new PeluqueroData
                     {
+                        Id = peluquero.Id,
                         Apellido=peluquero.Apellido,
                         DNI=peluquero.DNI,
                         ImagenPerfil=peluquero.ImagenPerfil,
@@ -44,12 +45,12 @@ namespace Turnero.Server.Controllers
 
                 ResponseDto.Result = ListaPeluquerosMapper;
 
-                return Ok(Response);
+                return Ok(ResponseDto);
             }
             catch (Exception ex)
             {
                 ResponseDto.MessageError = $"Ha ocurrido un error, {ex.Message}";
-                return BadRequest(Response);
+                return BadRequest(ResponseDto);
             }
             
         }

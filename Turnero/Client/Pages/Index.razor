@@ -20,10 +20,11 @@
                      <h4 class="mb-4">Elija fecha y hora del corte.</h4>
                      <RadzenDatePicker TValue="DateTime?"
                          ShowTime="true"
-                         Change=@(args => OnChange(args, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt"))
-                         HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-50" 
-                         Min="DateTime.Now" 
+                         HourFormat="12" DateFormat="dd/MM/yyyy h:mm tt" Class="w-50" 
+                         Min="DateTime.Now.AddDays(-1)" 
+                         Change=@(args => changeCalendar(args))
                      />
+                         @*HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-50" *@
 
                  </div>
 
@@ -33,55 +34,54 @@
 
                      <div style="display: flex; align-items: center; margin-bottom: 16px">
 
-                         <RadzenButton Click="@ClearSelection" Text="Clear Selection" />
-@*
-                         @if (selectedEmployees?.Any() == true)
-                         {
-                             <div style="margin-left: 16px">
-                                 Selected Employee: @selectedEmployees[0].FirstName @selectedEmployees[0].LastName
-                             </div>
-                         }*@
+                        <RadzenButton Click="@GetAllPeluqueros" Text="Obtener peluqueros" />
+
                      </div>
 
                      <RadzenDataGrid AllowFiltering="false"
-                                                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                                                AllowPaging="true" PageSize="3"
-                                                AllowSorting="true" Data="@employees" TItem="PeluqueroData" ColumnWidth="50px"
-                                                SelectionMode="DataGridSelectionMode.Single" @bind-Value=@selectedEmployees
-                                >
-                                    <Columns>
-                                        <RadzenDataGridColumn TItem="PeluqueroData" Property="Photo" Title="PeluqueroData" Sortable="false" Filterable="false">
-                                            <Template Context="data">
-                                                @*<RadzenImage Path="@data.Photo" *@
-                                                <RadzenImage Path="https://img.blogs.es/anexom/wp-content/uploads/2018/12/42707058715_61bbdc578f_k.jpg"
-                                                             style="width: 50px; height: 50px; border-radius: 8px; margin-right: 8px;" />
-                                                @data.Nombre @data.Apellido
-                                            </Template>
-                                        </RadzenDataGridColumn>
+                          FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                          AllowPaging="true" PageSize="3"
+                          AllowSorting="true" Data="@Peluqueros" TItem="PeluqueroData" ColumnWidth="50px"
+                          SelectionMode="DataGridSelectionMode.Single" @bind-Value=@PeluqueroSeleccionado
+                     >
+                          <Columns>
+                            <RadzenDataGridColumn TItem="PeluqueroData" Property="Nombre" Title="Nombre y Apellido" Sortable="false" Filterable="false">
+                                  <Template Context="data">
+                                      <RadzenImage Path="@data.ImagenPerfil"
+                                                  style="width: 50px; height: 50px; border-radius: 8px; margin-right: 8px;" />
+                                      @data.Nombre @data.Apellido
+                                  </Template>
+                            </RadzenDataGridColumn>
 
-                                        <RadzenDataGridColumn TItem="PeluqueroData" Property="Title" Title="Title" />
+                            <RadzenDataGridColumn TItem="PeluqueroData" Property="DNI" Title="D.N.I" />
 
-                                    </Columns>
-                                </RadzenDataGrid>
+                          </Columns>
+                     </RadzenDataGrid>
 
-                     <div class="row ">
-                        <div class="col-md-6 m-auto">
+                     <br/>
 
-                             <RadzenCard class="m-1">
-                                 <h3 class="h5">Peluquero seleccionado</h3>
-                                 <div class="d-flex flex-row">
-                                     <RadzenImage Path="https://img.blogs.es/anexom/wp-content/uploads/2018/12/42707058715_61bbdc578f_k.jpg" Class="rounded-circle float-left mr-3" Style="width: 100px; height: 100px;" />
-                                     <div>
-                                         <div>Employee</div>
-                                         <b>Juan Cruz Ledesma</b>
-                                         <div class="mt-3">Company</div>
-                                         <b>Peluquero</b>
-                                     </div>
-                                 </div>
-                             </RadzenCard>
+                    @if (PeluqueroSeleccionado?.Any() == true)
+                    {
+                         <div class="row" >
+                              <div class="col-md-6 m-auto">
 
-                        </div>
-                     </div>
+                                   <RadzenCard class="m-1">
+                                       <h3 class="h5">Peluquero seleccionado</h3>
+                                       <div class="d-flex flex-row">
+                                           @*<RadzenImage Path="https://img.blogs.es/anexom/wp-content/uploads/2018/12/42707058715_61bbdc578f_k.jpg" Class="rounded-circle float-left mr-3" Style="width: 100px; height: 100px;" />*@
+                                           <RadzenImage Path="@PeluqueroSeleccionado?[0].ImagenPerfil" Class="rounded-circle float-left mr-3" Style="width: 100px; height: 100px;" />
+                                           <div>
+                                               <div>Nombre y Apellido</div>
+                                               <b>@PeluqueroSeleccionado?[0].Nombre @PeluqueroSeleccionado?[0].Apellido</b>
+                                               <div class="mt-3">Puesto</div>
+                                               <b>Peluquero</b>
+                                           </div>
+                                       </div>
+                                   </RadzenCard>
+
+                              </div>
+                         </div>
+                    }
                  </div>
 
                 <div class="row d-flex my-3">
@@ -89,8 +89,7 @@
                     <RadzenButton Text="Realizar consulta"
                         class="justify-content-center"
                         ButtonStyle="ButtonStyle.Primary"
-                       Click=@(() => OnChange(DateTime.Now, "DatePicker with 12 hour time format", "MM/dd/yyyy h:mm tt"))
-                    />
+                     />
 
                 </div>
 
@@ -107,6 +106,9 @@
 @code {
     #region VARIABLES
 
+    public List<PeluqueroData> Peluqueros = null;
+    public IList<PeluqueroData> PeluqueroSeleccionado = null;
+
     ///  CALENDARIO
     public ModeloPrueba ModelTurno = new ModeloPrueba
     {
@@ -114,61 +116,61 @@
     };
 
 
+
+
+
     #endregion
 
-    protected override async void OnInitialized()
+
+    private async Task GetAllPeluqueros()
     {
 
-        await GetAllPeluqueros();
-
-        employees = new List<PeluqueroData>
+        try
         {
-            new PeluqueroData
+            var (ListaPeluqueros, MessageError) = await this.PeluqueroService.GetAll();
+
+            if (ListaPeluqueros == null || MessageError != null)
             {
-                ImagenPerfil= "",
-                Nombre= "",
-                Apellido= "",
-                DNI = "",
+                throw new Exception(MessageError);
             }
 
-        };
-        selectedEmployees = employees.Take(1).ToList();
+            Peluqueros = ListaPeluqueros;
+        }
+        catch (Exception ex)
+        {
+            // Mostrar mensaje $"Uups... Ha ocurrido un error: {ex.Message}"
+            //storeGlobal.SetMessageModal(ex.Message);
+            //storeGlobal.SetShowMessageModal(true);
+        }
+        finally
+        {
+            //storeGlobal.SetShowLoader(false);
+            //store.ResetFormLogin();
+
+            //var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+            //Task.Run(async () =>
+            //{
+            //    await Task.Delay(4000);
+            //    timer.Dispose();
+            //});
+
+            //while (await timer.WaitForNextTickAsync())
+            //{
+            //    storeGlobal.SetShowMessageModal(false);
+            //}
+        }
     }
 
 
 
     /* Calendario */
 
-    private void OnChange(DateTime? value, string name, string format)
+    private void changeCalendar(DateTime value)
     {
-        Console.WriteLine($"{name} value changed to {value?.ToString(format)}");
-        Console.Write("AAAAA " + ModelTurno.HorarioCorte);
+        ModelTurno.HorarioCorte = value;
     }
 
     /* Calendario */
-
-
-
-
-
-
-
-    public List<PeluqueroData> employees;
-    public IList<PeluqueroData> selectedEmployees;
-
-
-
-    private void ClearSelection()
-    {
-        selectedEmployees = null;
-    }
-
-    private async Task GetAllPeluqueros() {
-
-        await this.PeluqueroService.GetAll();
-
-
-    }
 
 
 

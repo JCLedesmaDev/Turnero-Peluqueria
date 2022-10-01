@@ -1,0 +1,26 @@
+﻿<div class="@(isShowModal ? "backgroundSpinner" : "CloseLoader")">
+
+    <div class="containerSpinner">
+
+        <div class="spinner">
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+
+        <h5> Espere por favor...</h5>
+
+    </div>
+
+</div>
+
+@code {
+
+    [Parameter] public bool isShowModal { get; set; }
+
+}

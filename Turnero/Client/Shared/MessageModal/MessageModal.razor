@@ -1,0 +1,19 @@
+﻿
+<article class="@(isShowModal ? OpenModalCss : CloseModalCss)">
+  <div>
+    <article class="contentModal">
+         <p>@Message</p>
+         <i class="fa-solid fa-face-laugh-beam"/>
+    </article>
+  </div>
+</article>
+
+@code {
+
+    public string OpenModalCss { get; set; } = "containerModal openModal";    
+    public string CloseModalCss { get; set; } = "containerModal";
+
+    [Parameter] public bool isShowModal { get; set; } 
+    [Parameter] public string Message { get; set; }
+
+}

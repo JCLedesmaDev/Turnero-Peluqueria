@@ -2,6 +2,8 @@
 @using Turnero.Client.Models;
 @using Radzen;
 @using Turnero.Shared.DTO_Back.Peluquero;
+@using Turnero.Client.Shared.MessageModal;
+@using Turnero.Client.Shared.Loader;
 
 @inject PeluqueroService PeluqueroService;
 
@@ -10,21 +12,23 @@
 
 <RadzenTemplateForm Data="@ModelTurno">
 
-    <div class="row d-flex justify-content-center align-items-center  widthPerson">
+    <div class="row d-flex justify-content-center align-items-center widthPerson bg-danger">
 
         <div class="col-md-6">
              <RadzenCard>
 
                  <div>
 
-                     <h4 class="mb-4">Elija fecha y hora del corte.</h4>
+                     <h4 class="mb-4">Seleccione fecha del corte y peluquero.</h4>
                      <RadzenDatePicker TValue="DateTime?"
                          ShowTime="true"
                          HourFormat="12" DateFormat="dd/MM/yyyy h:mm tt" Class="w-50" 
                          Min="DateTime.Now.AddDays(-1)" 
                          Change=@(args => changeCalendar(args))
+                         Placeholder="Seleccionar una fecha"
                      />
-                         @*HourFormat="12" DateFormat="MM/dd/yyyy h:mm tt" Class="w-50" *@
+
+                    <RadzenButton Click="@GetAllPeluqueros" Text="Obtener peluqueros" />
 
                  </div>
 
@@ -32,43 +36,45 @@
 
                  <div>
 
-                     <div style="display: flex; align-items: center; margin-bottom: 16px">
+                     @if (Peluqueros != null) {
 
-                        <RadzenButton Click="@GetAllPeluqueros" Text="Obtener peluqueros" />
+                         <RadzenDataGrid AllowFiltering="false"
+                              FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                              AllowPaging="true" PageSize="3"
+                              AllowSorting="true" Data="@Peluqueros" TItem="PeluqueroData" ColumnWidth="50px"
+                              SelectionMode="DataGridSelectionMode.Single" @bind-Value=@PeluqueroSeleccionado
+                         >
 
-                     </div>
 
-                     <RadzenDataGrid AllowFiltering="false"
-                          FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
-                          AllowPaging="true" PageSize="3"
-                          AllowSorting="true" Data="@Peluqueros" TItem="PeluqueroData" ColumnWidth="50px"
-                          SelectionMode="DataGridSelectionMode.Single" @bind-Value=@PeluqueroSeleccionado
-                     >
-                          <Columns>
-                            <RadzenDataGridColumn TItem="PeluqueroData" Property="Nombre" Title="Nombre y Apellido" Sortable="false" Filterable="false">
-                                  <Template Context="data">
-                                      <RadzenImage Path="@data.ImagenPerfil"
-                                                  style="width: 50px; height: 50px; border-radius: 8px; margin-right: 8px;" />
-                                      @data.Nombre @data.Apellido
-                                  </Template>
-                            </RadzenDataGridColumn>
+                              <Columns>
+                                <RadzenDataGridColumn TItem="PeluqueroData" Property="Nombre" Title="Nombre y Apellido" Sortable="false" Filterable="false">
+                                      <Template Context="data">
+                                          <RadzenImage Path="@data.ImagenPerfil"
+                                                      style="width: 50px; height: 50px; border-radius: 8px; margin-right: 8px;" />
+                                          @data.Nombre @data.Apellido
+                                      </Template>
+                                </RadzenDataGridColumn>
 
-                            <RadzenDataGridColumn TItem="PeluqueroData" Property="DNI" Title="D.N.I" />
+                                <RadzenDataGridColumn TItem="PeluqueroData" Property="DNI" Title="D.N.I" />
 
-                          </Columns>
-                     </RadzenDataGrid>
+                              </Columns>
 
-                     <br/>
+                         </RadzenDataGrid>
+                     }
 
-                    @if (PeluqueroSeleccionado?.Any() == true)
-                    {
+                     @if (isLoaderPeluquero)
+                     {
+                        <p class="text-center"> Cargando peluqueros...</p>
+                     }
+
+                     @if (PeluqueroSeleccionado?.Any() == true)
+                     {
                          <div class="row" >
                               <div class="col-md-6 m-auto">
 
-                                   <RadzenCard class="m-1">
+                                   <RadzenCard class="">
                                        <h3 class="h5">Peluquero seleccionado</h3>
                                        <div class="d-flex flex-row">
-                                           @*<RadzenImage Path="https://img.blogs.es/anexom/wp-content/uploads/2018/12/42707058715_61bbdc578f_k.jpg" Class="rounded-circle float-left mr-3" Style="width: 100px; height: 100px;" />*@
                                            <RadzenImage Path="@PeluqueroSeleccionado?[0].ImagenPerfil" Class="rounded-circle float-left mr-3" Style="width: 100px; height: 100px;" />
                                            <div>
                                                <div>Nombre y Apellido</div>
@@ -78,20 +84,22 @@
                                            </div>
                                        </div>
                                    </RadzenCard>
-
-                              </div>
+                              
+                               </div>
                          </div>
-                    }
+                     }
+
                  </div>
 
-                <div class="row d-flex my-3">
+                 <div class="row d-flex mt-3">
 
-                    <RadzenButton Text="Realizar consulta"
-                        class="justify-content-center"
-                        ButtonStyle="ButtonStyle.Primary"
+                     <RadzenButton Text="Realizar consulta"
+                         class="justify-content-center"
+                         ButtonStyle="ButtonStyle.Primary"
+                         Click="onSubmit" 
                      />
 
-                </div>
+                 </div>
 
              </RadzenCard>
         </div>
@@ -102,31 +110,46 @@
                   
 </RadzenTemplateForm>
 
+<MessageModal 
+    isShowModal=@showModal 
+    Message=@MessageModal
+/>
+
+<Loader isShowModal="@isLoaderSpinner" />
 
 @code {
+
     #region VARIABLES
+
+    public bool isLoaderPeluquero = false;
+    public bool isLoaderSpinner = false;
+
+
+    public bool showModal = false;
+    public string MessageModal = "";
 
     public List<PeluqueroData> Peluqueros = null;
     public IList<PeluqueroData> PeluqueroSeleccionado = null;
 
-    ///  CALENDARIO
+
     public ModeloPrueba ModelTurno = new ModeloPrueba
     {
         HorarioCorte = DateTime.Now
     };
 
-
-
-
-
     #endregion
 
 
+    private void changeCalendar(DateTime? value) => ModelTurno.HorarioCorte = (DateTime)value;
+
     private async Task GetAllPeluqueros()
     {
-
         try
         {
+            isLoaderPeluquero = true;
+            Peluqueros = null;
+            PeluqueroSeleccionado = null;
+
             var (ListaPeluqueros, MessageError) = await this.PeluqueroService.GetAll();
 
             if (ListaPeluqueros == null || MessageError != null)
@@ -134,44 +157,92 @@
                 throw new Exception(MessageError);
             }
 
+            isLoaderPeluquero = false;
             Peluqueros = ListaPeluqueros;
         }
         catch (Exception ex)
         {
-            // Mostrar mensaje $"Uups... Ha ocurrido un error: {ex.Message}"
-            //storeGlobal.SetMessageModal(ex.Message);
-            //storeGlobal.SetShowMessageModal(true);
+            MessageModal = $"Uups... Ha ocurrido un error {ex.Message}";
+            showModal = true;
         }
         finally
         {
-            //storeGlobal.SetShowLoader(false);
-            //store.ResetFormLogin();
+            isLoaderPeluquero = false;
 
-            //var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
-            //Task.Run(async () =>
-            //{
-            //    await Task.Delay(4000);
-            //    timer.Dispose();
-            //});
+            var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+            Task.Run(async () =>
+            {
+                await Task.Delay(4000);
+                timer.Dispose();
+            });
 
-            //while (await timer.WaitForNextTickAsync())
-            //{
-            //    storeGlobal.SetShowMessageModal(false);
-            //}
+            while (await timer.WaitForNextTickAsync())
+            {
+                showModal = false;
+            }
         }
     }
 
 
+    private async void onSubmit() {
+        //ModelTurno.HorarioCorte
+        //Console.WriteLine($"AAA {ModelTurno?.HorarioCorte}");
+        //Console.WriteLine($"PROBANDO {PeluqueroSeleccionado?[0].Nombre}");
 
-    /* Calendario */
 
-    private void changeCalendar(DateTime value)
-    {
-        ModelTurno.HorarioCorte = value;
+        try
+        {
+            isLoaderSpinner = true;
+
+
+            var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+            Task.Run(async () =>
+            {
+                await Task.Delay(4000);
+                timer.Dispose();
+            });
+
+            while (await timer.WaitForNextTickAsync())
+            {
+                isLoaderSpinner = false;
+            }
+
+
+            throw new Exception("LALALAL");
+
+            //var (ListaPeluqueros, MessageError) = await this.PeluqueroService.GetAll();
+
+            //if (ListaPeluqueros == null || MessageError != null)
+            //{
+            //    throw new Exception(MessageError);
+            //}
+
+            //isLoader = false;
+            //Peluqueros = ListaPeluqueros;
+
+        }
+        catch (Exception ex)
+        {
+            MessageModal = $"Uups... Ha ocurrido un error {ex.Message}";
+            showModal = true;
+        }
+        finally
+        {
+            isLoaderSpinner = false;
+
+            var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+            Task.Run(async () =>
+            {
+                await Task.Delay(4000);
+                timer.Dispose();
+            });
+
+            while (await timer.WaitForNextTickAsync())
+            {
+                showModal = false;
+            }
+        }
     }
-
-    /* Calendario */
-
 
 
 }

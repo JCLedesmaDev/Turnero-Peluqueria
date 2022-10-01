@@ -110,12 +110,13 @@
                   
 </RadzenTemplateForm>
 
+    <Loader isLoaderSpinner="@isLoaderSpinner" />
+
 <MessageModal 
     isShowModal=@showModal 
     Message=@MessageModal
 />
 
-<Loader isShowModal="@isLoaderSpinner" />
 
 @code {
 
@@ -194,20 +195,6 @@
         {
             isLoaderSpinner = true;
 
-
-            var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
-            Task.Run(async () =>
-            {
-                await Task.Delay(4000);
-                timer.Dispose();
-            });
-
-            while (await timer.WaitForNextTickAsync())
-            {
-                isLoaderSpinner = false;
-            }
-
-
             throw new Exception("LALALAL");
 
             //var (ListaPeluqueros, MessageError) = await this.PeluqueroService.GetAll();
@@ -224,11 +211,10 @@
         catch (Exception ex)
         {
             MessageModal = $"Uups... Ha ocurrido un error {ex.Message}";
-            showModal = true;
+            //showModal = true;
         }
         finally
         {
-            isLoaderSpinner = false;
 
             var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
             Task.Run(async () =>
@@ -239,7 +225,8 @@
 
             while (await timer.WaitForNextTickAsync())
             {
-                showModal = false;
+            isLoaderSpinner = false;
+                //showModal = false;
             }
         }
     }

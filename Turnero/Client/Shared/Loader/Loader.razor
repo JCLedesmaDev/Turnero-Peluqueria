@@ -1,4 +1,4 @@
-﻿<div class="@(isShowModal ? "backgroundSpinner" : "CloseLoader")">
+﻿<div class="@(isLoaderSpinner ? "backgroundSpinner" : "CloseLoader")">
 
     <div class="containerSpinner">
 
@@ -21,6 +21,6 @@
 
 @code {
 
-    [Parameter] public bool isShowModal { get; set; }
+    [Parameter] public bool isLoaderSpinner { get; set; }
 
 }

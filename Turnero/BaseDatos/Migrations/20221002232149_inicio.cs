@@ -85,8 +85,8 @@ namespace Turnero.BaseDatos.Migrations
                 columns: new[] { "Id", "Apellido", "DNI", "ImagenPerfil", "Nombre", "Password" },
                 values: new object[,]
                 {
-                    { 11, "Gonzales", "35.214.872", "", "David AAAAAAAA", "ASD" },
-                    { 23, "Del Valle", "25.214.872", "", "Eduardo", "ASD" }
+                    { 11, "Gonzales", "35.214.872", "https://img.freepik.com/foto-gratis/retrato-joven-sonriente-gafas_171337-4842.jpg?w=2000", "David", "ASD" },
+                    { 23, "Del Valle", "25.214.872", "https://i0.wp.com/sonria.com/wp-content/uploads/2016/08/2165947w620.jpg?fit=620%2C348&ssl=1", "Eduardo", "ASD" }
                 });
 
             migrationBuilder.InsertData(

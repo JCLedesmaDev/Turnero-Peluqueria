@@ -16,10 +16,10 @@ namespace Turnero.BaseDatos.Data
                new Peluquero
                {
                    Id = 11,
-                   Nombre = "David AAAAAAAA",
+                   Nombre = "David",
                    Apellido = "Gonzales",
                    DNI = "35.214.872",
-                   ImagenPerfil = "",
+                   ImagenPerfil = "https://img.freepik.com/foto-gratis/retrato-joven-sonriente-gafas_171337-4842.jpg?w=2000",
                    Password = "ASD"
                },
                new Peluquero
@@ -28,7 +28,7 @@ namespace Turnero.BaseDatos.Data
                    Nombre = "Eduardo",
                    Apellido = "Del Valle",
                    DNI = "25.214.872",
-                   ImagenPerfil = "",
+                   ImagenPerfil = "https://i0.wp.com/sonria.com/wp-content/uploads/2016/08/2165947w620.jpg?fit=620%2C348&ssl=1",
                    Password = "ASD"
                }
             );

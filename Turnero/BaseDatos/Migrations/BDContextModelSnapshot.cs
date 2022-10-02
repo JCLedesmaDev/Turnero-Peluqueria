@@ -114,8 +114,8 @@ namespace Turnero.BaseDatos.Migrations
                             Id = 11,
                             Apellido = "Gonzales",
                             DNI = "35.214.872",
-                            ImagenPerfil = "",
-                            Nombre = "David AAAAAAAA",
+                            ImagenPerfil = "https://img.freepik.com/foto-gratis/retrato-joven-sonriente-gafas_171337-4842.jpg?w=2000",
+                            Nombre = "David",
                             Password = "ASD"
                         },
                         new
@@ -123,7 +123,7 @@ namespace Turnero.BaseDatos.Migrations
                             Id = 23,
                             Apellido = "Del Valle",
                             DNI = "25.214.872",
-                            ImagenPerfil = "",
+                            ImagenPerfil = "https://i0.wp.com/sonria.com/wp-content/uploads/2016/08/2165947w620.jpg?fit=620%2C348&ssl=1",
                             Nombre = "Eduardo",
                             Password = "ASD"
                         });

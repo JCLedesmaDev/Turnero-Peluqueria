@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Turnero.BaseDatos.Data.Comun;
 
@@ -31,7 +30,7 @@ namespace Turnero.BaseDatos.Data.Entidades
     {
         public int PeluqueroId { get; set; }
         public int ClienteId { get; set; }
-        public DateTime FechaCreacionTurno { get; set; } 
+        public DateTime FechaCreacionTurno { get; set; }
         public DateTime FechaTurnoReservado { get; set; }
 
 

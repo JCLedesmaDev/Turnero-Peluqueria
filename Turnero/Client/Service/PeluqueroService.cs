@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net.Http.Json;
+﻿using System.Net.Http.Json;
 using Turnero.Shared.DTO_Back;
 using Turnero.Shared.DTO_Back.Peluquero;
 
@@ -21,7 +20,7 @@ namespace Turnero.Client.Service
 
             ResponseDto<List<PeluqueroData>> resultHttp = await this.http.GetFromJsonAsync<ResponseDto<List<PeluqueroData>>>("api/Peluquero/GetAll");
 
-            return (resultHttp.Result, resultHttp.MessageError);
+            return (resultHttp.result, resultHttp.messageError);
         }
 
     }

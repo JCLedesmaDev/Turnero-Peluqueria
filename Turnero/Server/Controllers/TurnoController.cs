@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using Turnero.Shared.DTO_Back;
+﻿using Microsoft.AspNetCore.Mvc;
 
 namespace Turnero.Server.Controllers
 {
@@ -24,21 +21,19 @@ namespace Turnero.Server.Controllers
 
             try
             {
-                bool FechaValidate = Consulta?.FechaHoraCorte == null || Consulta.FechaHoraCorte <= DateTime.Now;
-                bool IdPeluqueroValidate = Consulta?.IdPeluquero == null || Consulta?.IdPeluquero == 0;
 
-                if (IdPeluqueroValidate)
+                if (Consulta?.IdPeluquero == null || Consulta?.IdPeluquero == 0)
                 {
-                    throw new Exception("Debe ingresar el Id del peluquero.");
-                }                    
-        
-                if (FechaValidate)
+                    throw new Exception("debe seleccionar un peluquero.");
+                }
+
+                if (Consulta?.FechaHoraCorte == null)
                 {
-                    throw new Exception("La fecha debe ser mayor o igual a la fecha actual");
+                    throw new Exception("la fecha debe ser mayor o igual a la fecha actual");
                 }
 
                 Peluquero? peluquero = await this._context.TablaPeluqueros
-                    .FirstOrDefaultAsync( Peluquero => Peluquero.Id == Consulta.IdPeluquero);
+                    .FirstOrDefaultAsync(Peluquero => Peluquero.Id == Consulta.IdPeluquero);
 
                 if (peluquero == null)
                 {
@@ -47,7 +42,7 @@ namespace Turnero.Server.Controllers
 
                 List<Turno> TurnosReservados = await this._context.TablaTurnos
                     .Where(Turno => Turno.PeluqueroId == Consulta.IdPeluquero)
-                    .Where(Turno => 
+                    .Where(Turno =>
                         Consulta.FechaHoraCorte > Turno.FechaTurnoReservado.AddMinutes(MargenTurno.RestarExtraTiempo) && //Esto no esta en la entrevista...
                         Consulta.FechaHoraCorte <= Turno.FechaTurnoReservado.AddMinutes(MargenTurno.SumarExtraTiempo)
                      ) // Observar
@@ -61,16 +56,17 @@ namespace Turnero.Server.Controllers
                     throw new Exception("La fecha ingresada no se encuentra disponible para reservar.");
                 }
 
-                ResponseDto.Result = "La fecha ingresada se encuentra disponible para reservar.¿Desea reservarlo?";
+                //ResponseDto.result = "La fecha ingresada se encuentra disponible para reservar.¿Desea reservarlo?";
+                ResponseDto.result = "La fecha ingresada se encuentra disponible para reservar.";
 
                 return Ok(ResponseDto);
             }
             catch (Exception ex)
             {
-                ResponseDto.MessageError = $"Ha ocurrido un error, {ex.Message}";
+                ResponseDto.messageError = $"Ha ocurrido un error, {ex.Message}";
                 return BadRequest(ResponseDto);
             }
-            
+
         }
     }
 }

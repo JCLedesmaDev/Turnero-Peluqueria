@@ -1,16 +1,18 @@
 ﻿@page "/"
-@using Turnero.Client.Models;
 @using Radzen;
 @using Turnero.Shared.DTO_Back.Peluquero;
-@using Turnero.Client.Shared.MessageModal;
-@using Turnero.Client.Shared.Loader;
+@using Turnero.Shared.DTO_Front
 
+@inject StoreGlobal.GlobalStore storeGlobal;
 @inject PeluqueroService PeluqueroService;
+@inject TurnoService TurnoService;
+@implements IDisposable;
 
-<PageTitle>Index</PageTitle>
+
+<PageTitle>Consultar turno</PageTitle>
 
 
-<RadzenTemplateForm Data="@ModelTurno">
+<RadzenTemplateForm Data="@ConsultaTurnoData">
 
     <div class="row d-flex justify-content-center align-items-center widthPerson bg-danger">
 
@@ -38,28 +40,24 @@
 
                      @if (Peluqueros != null) {
 
-                         <RadzenDataGrid AllowFiltering="false"
+                        <RadzenDataGrid AllowFiltering="false"
                               FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
                               AllowPaging="true" PageSize="3"
                               AllowSorting="true" Data="@Peluqueros" TItem="PeluqueroData" ColumnWidth="50px"
                               SelectionMode="DataGridSelectionMode.Single" @bind-Value=@PeluqueroSeleccionado
-                         >
+                        >
+                            <Columns>
+                              <RadzenDataGridColumn TItem="PeluqueroData" Property="Nombre" Title="Nombre y Apellido" Sortable="false" Filterable="false">
+                                    <Template Context="data">
+                                        <RadzenImage Path="@data.ImagenPerfil"
+                                                    style="width: 50px; height: 50px; border-radius: 8px; margin-right: 8px;" />
+                                        @data.Nombre @data.Apellido
+                                    </Template>
+                              </RadzenDataGridColumn>
+                              <RadzenDataGridColumn TItem="PeluqueroData" Property="DNI" Title="D.N.I" />
+                            </Columns>
 
-
-                              <Columns>
-                                <RadzenDataGridColumn TItem="PeluqueroData" Property="Nombre" Title="Nombre y Apellido" Sortable="false" Filterable="false">
-                                      <Template Context="data">
-                                          <RadzenImage Path="@data.ImagenPerfil"
-                                                      style="width: 50px; height: 50px; border-radius: 8px; margin-right: 8px;" />
-                                          @data.Nombre @data.Apellido
-                                      </Template>
-                                </RadzenDataGridColumn>
-
-                                <RadzenDataGridColumn TItem="PeluqueroData" Property="DNI" Title="D.N.I" />
-
-                              </Columns>
-
-                         </RadzenDataGrid>
+                        </RadzenDataGrid>
                      }
 
                      @if (isLoaderPeluquero)
@@ -110,12 +108,7 @@
                   
 </RadzenTemplateForm>
 
-    <Loader isLoaderSpinner="@isLoaderSpinner" />
 
-<MessageModal 
-    isShowModal=@showModal 
-    Message=@MessageModal
-/>
 
 
 @code {
@@ -123,25 +116,43 @@
     #region VARIABLES
 
     public bool isLoaderPeluquero = false;
-    public bool isLoaderSpinner = false;
-
-
-    public bool showModal = false;
-    public string MessageModal = "";
+    public bool FechaSeleccionada = false;
 
     public List<PeluqueroData> Peluqueros = null;
     public IList<PeluqueroData> PeluqueroSeleccionado = null;
 
 
-    public ModeloPrueba ModelTurno = new ModeloPrueba
-    {
-        HorarioCorte = DateTime.Now
+    public ConsultaTurnoDto ConsultaTurnoData = new ConsultaTurnoDto {
+        FechaHoraCorte = DateTime.Now,
+        IdPeluquero = 0
     };
 
     #endregion
 
 
-    private void changeCalendar(DateTime? value) => ModelTurno.HorarioCorte = (DateTime)value;
+    #region Ciclo de vida del componente
+
+    protected override void OnInitialized()
+    {
+        // State
+        storeGlobal.SubscribeChangedState(updateComponent);
+    }
+
+    public void Dispose()
+    {
+        storeGlobal.DesubscribeChangedState(updateComponent);
+    }
+
+    private void updateComponent() => StateHasChanged();
+
+    #endregion
+
+
+
+    private void changeCalendar(DateTime? value) {
+        ConsultaTurnoData.FechaHoraCorte = (DateTime)value;
+        FechaSeleccionada = true;
+    }
 
     private async Task GetAllPeluqueros()
     {
@@ -163,13 +174,12 @@
         }
         catch (Exception ex)
         {
-            MessageModal = $"Uups... Ha ocurrido un error {ex.Message}";
-            showModal = true;
+            isLoaderPeluquero = false;
+            storeGlobal.SetMessageModal($"Uups... Ha ocurrido un error {ex.Message}");
+            storeGlobal.SetShowMessageModal(true);
         }
         finally
         {
-            isLoaderPeluquero = false;
-
             var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
             Task.Run(async () =>
             {
@@ -179,39 +189,49 @@
 
             while (await timer.WaitForNextTickAsync())
             {
-                showModal = false;
+                storeGlobal.SetShowMessageModal(false);
             }
         }
     }
 
 
     private async void onSubmit() {
-        //ModelTurno.HorarioCorte
-        //Console.WriteLine($"AAA {ModelTurno?.HorarioCorte}");
-        //Console.WriteLine($"PROBANDO {PeluqueroSeleccionado?[0].Nombre}");
-
-
         try
         {
-            isLoaderSpinner = true;
+            storeGlobal.SetShowLoader(true);
 
-            throw new Exception("LALALAL");
+            if (FechaSeleccionada == false)
+            {
+                throw new Exception("debe seleccionar una fecha y horario de corte valido.");
+            }
 
-            //var (ListaPeluqueros, MessageError) = await this.PeluqueroService.GetAll();
+            if (PeluqueroSeleccionado == null)
+            {
+                throw new Exception("debe seleccionar un peluquero para consultar un turno.");
+            }
 
-            //if (ListaPeluqueros == null || MessageError != null)
-            //{
-            //    throw new Exception(MessageError);
-            //}
+            ConsultaTurnoData.IdPeluquero = PeluqueroSeleccionado[0].Id;
 
-            //isLoader = false;
-            //Peluqueros = ListaPeluqueros;
+            var (TurnoDisponible, MessageError) = await this.TurnoService.consultarTurnoReservado(ConsultaTurnoData);
+
+            if (TurnoDisponible == null || MessageError != null)
+            {
+                throw new Exception(MessageError);
+            }
+
+            storeGlobal.SetShowLoader(false);
+
+            storeGlobal.SetMessageModal(TurnoDisponible);
+            storeGlobal.SetShowMessageModal(true);
 
         }
         catch (Exception ex)
         {
-            MessageModal = $"Uups... Ha ocurrido un error {ex.Message}";
-            //showModal = true;
+            storeGlobal.SetShowLoader(false);
+            storeGlobal.SetMessageModal($"Uups... Ha ocurrido un error {ex.Message}");
+            storeGlobal.SetShowMessageModal(true);
+
+            Console.WriteLine($"Error: {ex.Message}");
         }
         finally
         {
@@ -225,8 +245,7 @@
 
             while (await timer.WaitForNextTickAsync())
             {
-            isLoaderSpinner = false;
-                //showModal = false;
+                storeGlobal.SetShowMessageModal(false);
             }
         }
     }

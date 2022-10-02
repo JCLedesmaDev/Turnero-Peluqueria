@@ -36,11 +36,11 @@ namespace Turnero.BaseDatos.Data
             modelBuilder.Entity<Turno>().HasData(
                 new Turno
                 {
-                    Id=1, 
-                    ClienteId=1234,
+                    Id = 1,
+                    ClienteId = 1234,
                     FechaCreacionTurno = new DateTime(2022, 8, 19, 14, 22, 00),
                     FechaTurnoReservado = new DateTime(2022, 10, 22, 18, 30, 00),
-                    PeluqueroId= 11,                    
+                    PeluqueroId = 11,
                 },
                 new Turno
                 {
@@ -63,19 +63,25 @@ namespace Turnero.BaseDatos.Data
             modelBuilder.Entity<Cliente>().HasData(
                 new Cliente
                 {
-                    Id=1234, Nombre = "Mariano",
-                    Apellido="Cejas", NumeroTelefono="123123",
+                    Id = 1234,
+                    Nombre = "Mariano",
+                    Apellido = "Cejas",
+                    NumeroTelefono = "123123",
                 },
                 new Cliente
                 {
-                    Id = 3456, Nombre = "Nacho",
-                    Apellido = "Aguada", NumeroTelefono = "35124789",
+                    Id = 3456,
+                    Nombre = "Nacho",
+                    Apellido = "Aguada",
+                    NumeroTelefono = "35124789",
                 },
                 new Cliente
                 {
-                    Id = 2345, Nombre = "Tincho",
-                    Apellido = "Marin", NumeroTelefono = "5234",
-                } 
+                    Id = 2345,
+                    Nombre = "Tincho",
+                    Apellido = "Marin",
+                    NumeroTelefono = "5234",
+                }
             );
 
         }

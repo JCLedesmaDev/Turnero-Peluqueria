@@ -1,4 +1,7 @@
-﻿<div class="@(isLoaderSpinner ? "backgroundSpinner" : "CloseLoader")">
+﻿@inject StoreGlobal.GlobalStore storeGlobal;
+@implements IDisposable;
+
+<div class="@(storeGlobal.IsShowLoader() ? "backgroundSpinner" : "CloseLoader")">
 
     <div class="containerSpinner">
 
@@ -21,6 +24,25 @@
 
 @code {
 
-    [Parameter] public bool isLoaderSpinner { get; set; }
+    #region Ciclo de vida del componente./ Store.
+
+    protected override void OnInitialized()
+    {
+        storeGlobal.SubscribeChangedState(updateComponent);
+    }
+
+    public void Dispose()
+    {
+        storeGlobal.DesubscribeChangedState(updateComponent);
+    }
+
+    #endregion
+
+
+    #region METODOS
+
+    private void updateComponent() => StateHasChanged();
+
+    #endregion
 
 }

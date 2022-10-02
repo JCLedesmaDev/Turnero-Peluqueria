@@ -1,19 +1,39 @@
-﻿
-<article class="@(isShowModal ? OpenModalCss : CloseModalCss)">
+﻿@inject StoreGlobal.GlobalStore storeGlobal;
+@implements IDisposable;
+
+<article class="@(storeGlobal.IsShowMessageModal() ? OpenModalCss : CloseModalCss)">
   <div>
     <article class="contentModal">
-         <p>@Message</p>
-         <i class="fa-solid fa-face-laugh-beam"/>
+            <p>@storeGlobal.GetMessageModal()</p>
+            <i class="fa-solid fa-face-laugh-beam"/>
     </article>
   </div>
 </article>
 
 @code {
 
-    public string OpenModalCss { get; set; } = "containerModal openModal";    
+    public string OpenModalCss { get; set; } = "containerModal openModal";
     public string CloseModalCss { get; set; } = "containerModal";
 
-    [Parameter] public bool isShowModal { get; set; } 
-    [Parameter] public string Message { get; set; }
 
+    #region Ciclo de vida del componente./ Store.
+
+    protected override void OnInitialized()
+    {
+        storeGlobal.SubscribeChangedState(updateComponent);
+    }
+
+    public void Dispose()
+    {
+        storeGlobal.DesubscribeChangedState(updateComponent);
+    }
+
+    #endregion
+
+
+    #region METODOS
+
+    private void updateComponent() => StateHasChanged();
+
+    #endregion
 }

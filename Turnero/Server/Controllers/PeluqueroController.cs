@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
-using Turnero.Shared.DTO_Back;
+﻿using Microsoft.AspNetCore.Mvc;
 using Turnero.Shared.DTO_Back.Peluquero;
 
 namespace Turnero.Server.Controllers
@@ -19,7 +16,7 @@ namespace Turnero.Server.Controllers
         }
 
         [HttpGet("GetAll")]
-        public async Task<ActionResult<ResponseDto<List<PeluqueroData>>>> GetAll ()
+        public async Task<ActionResult<ResponseDto<List<PeluqueroData>>>> GetAll()
         {
             ResponseDto<List<PeluqueroData>> ResponseDto = new ResponseDto<List<PeluqueroData>>();
 
@@ -35,24 +32,24 @@ namespace Turnero.Server.Controllers
                     ListaPeluquerosMapper.Add(new PeluqueroData
                     {
                         Id = peluquero.Id,
-                        Apellido=peluquero.Apellido,
-                        DNI=peluquero.DNI,
-                        ImagenPerfil=peluquero.ImagenPerfil,
-                        Nombre = peluquero.Nombre   
+                        Apellido = peluquero.Apellido,
+                        DNI = peluquero.DNI,
+                        ImagenPerfil = peluquero.ImagenPerfil,
+                        Nombre = peluquero.Nombre
                     });
                 });
 
 
-                ResponseDto.Result = ListaPeluquerosMapper;
+                ResponseDto.result = ListaPeluquerosMapper;
 
                 return Ok(ResponseDto);
             }
             catch (Exception ex)
             {
-                ResponseDto.MessageError = $"Ha ocurrido un error, {ex.Message}";
+                ResponseDto.messageError = $"Ha ocurrido un error, {ex.Message}";
                 return BadRequest(ResponseDto);
             }
-            
+
         }
     }
 }

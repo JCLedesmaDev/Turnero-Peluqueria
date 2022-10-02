@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Turnero.BaseDatos.Data.Comun;
 
@@ -19,7 +18,7 @@ namespace Turnero.BaseDatos.Data.Entidades
 
         // Determina que esta haciendo una propiedad inversa con la propiedad
         // "Cliente" de la clase "Turno"
-        [InverseProperty("Cliente")] 
+        [InverseProperty("Cliente")]
         public List<Turno> ListaTurnos { get; set; }
     }
-} 
+}

@@ -14,4 +14,5 @@ namespace Turnero.Shared.DTO_Back.Peluquero
         public string Apellido { get; set; }
         public string DNI { get; set; }
     }
+
 }

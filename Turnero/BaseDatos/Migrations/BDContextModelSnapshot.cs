@@ -166,7 +166,7 @@ namespace Turnero.BaseDatos.Migrations
                             Id = 1,
                             ClienteId = 1234,
                             FechaCreacionTurno = new DateTime(2022, 8, 19, 14, 22, 0, 0, DateTimeKind.Unspecified),
-                            FechaTurnoReservado = new DateTime(2022, 10, 22, 18, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurnoReservado = new DateTime(2022, 11, 22, 18, 30, 0, 0, DateTimeKind.Unspecified),
                             PeluqueroId = 11
                         },
                         new
@@ -174,7 +174,7 @@ namespace Turnero.BaseDatos.Migrations
                             Id = 2,
                             ClienteId = 3456,
                             FechaCreacionTurno = new DateTime(2022, 9, 14, 17, 30, 0, 0, DateTimeKind.Unspecified),
-                            FechaTurnoReservado = new DateTime(2022, 9, 23, 16, 30, 0, 0, DateTimeKind.Unspecified),
+                            FechaTurnoReservado = new DateTime(2022, 11, 23, 16, 30, 0, 0, DateTimeKind.Unspecified),
                             PeluqueroId = 11
                         },
                         new

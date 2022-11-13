@@ -206,7 +206,7 @@
     private async void onSubmit() {
         try
         {
-            storeGlobal.SetShowLoader(true);
+            //storeGlobal.SetShowLoader(true);
 
             if (FechaSeleccionada == false)
             {
@@ -244,17 +244,17 @@
         finally
         {
 
-            var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
-            Task.Run(async () =>
-            {
-                await Task.Delay(4000);
-                timer.Dispose();
-            });
+            //var timer = new PeriodicTimer(TimeSpan.FromSeconds(3));
+            //Task.Run(async () =>
+            //{
+            //    await Task.Delay(4000);
+            //    timer.Dispose();
+            //});
 
-            while (await timer.WaitForNextTickAsync())
-            {
-                storeGlobal.SetShowMessageModal(false);
-            }
+            //while (await timer.WaitForNextTickAsync())
+            //{
+            //    storeGlobal.SetShowMessageModal(false);
+            //}
         }
     }
 

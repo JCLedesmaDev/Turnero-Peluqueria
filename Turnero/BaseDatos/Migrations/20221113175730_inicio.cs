@@ -92,12 +92,12 @@ namespace Turnero.BaseDatos.Migrations
             migrationBuilder.InsertData(
                 table: "TablaTurnos",
                 columns: new[] { "Id", "ClienteId", "FechaCreacionTurno", "FechaTurnoReservado", "PeluqueroId" },
-                values: new object[] { 1, 1234, new DateTime(2022, 8, 19, 14, 22, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 10, 22, 18, 30, 0, 0, DateTimeKind.Unspecified), 11 });
+                values: new object[] { 1, 1234, new DateTime(2022, 8, 19, 14, 22, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 11, 22, 18, 30, 0, 0, DateTimeKind.Unspecified), 11 });
 
             migrationBuilder.InsertData(
                 table: "TablaTurnos",
                 columns: new[] { "Id", "ClienteId", "FechaCreacionTurno", "FechaTurnoReservado", "PeluqueroId" },
-                values: new object[] { 2, 3456, new DateTime(2022, 9, 14, 17, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 9, 23, 16, 30, 0, 0, DateTimeKind.Unspecified), 11 });
+                values: new object[] { 2, 3456, new DateTime(2022, 9, 14, 17, 30, 0, 0, DateTimeKind.Unspecified), new DateTime(2022, 11, 23, 16, 30, 0, 0, DateTimeKind.Unspecified), 11 });
 
             migrationBuilder.InsertData(
                 table: "TablaTurnos",

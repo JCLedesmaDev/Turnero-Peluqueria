@@ -300,13 +300,13 @@ la cual sera el punto de union entre la Tabla A y la Tabla B.
 
 Tabla A: Autor
 -----------------
-[InverseProperty("Libro")]
-public List<LibroPorAutor> Libros [get; set;]
+[InverseProperty("Autor")]
+public List<LibroPorAutor> Libros {get; set;}
 
 
 Tabla B: Libro
 -----------------
-[InverseProperty("Autor")]
+[InverseProperty("Libro")]
 public List<LibroPorAutor> Autores
 
 
@@ -319,7 +319,7 @@ public int AutorId {get; set;}
 public Autor Autor {get; set;}
 
 [ForeignKey("LibroId")]
-public Autor Libro {get; set;}
+public Libro Libro {get; set;}
 
 
 Ejemplos de peticiones a la BD para obtener libros:
